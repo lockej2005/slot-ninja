@@ -1,0 +1,138 @@
+// SearchResults.scss
+@import '../../variables';
+
+.search-results {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: $secondary-color;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  .results-title {
+    margin-bottom: 20px;
+    text-align: center;
+    color: $text-color;
+  }
+
+  .search-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      flex: 1 1 200px;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 5px;
+      font-size: 16px;
+      color: $text-color;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+      }
+    }
+
+    select,
+    button {
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: $primary-color;
+      border: none;
+      border-radius: 5px;
+      color: $secondary-color;
+      font-size: 16px;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: $hover-color;
+      }
+    }
+  }
+
+  .results-list {
+    display: grid;
+    list-style-type: none;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .result-item {
+    background-color: $secondary-color;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    h3 {
+      color: $primary-color;
+      margin: 0 0 10px 0;
+    }
+
+    p {
+      color: $text-color;
+      margin: 5px 0;
+    }
+
+    .price {
+      color: $text-color;
+      font-weight: bold;
+    }
+  }
+
+  .featured-results {
+    background-color: $container-color;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .featured-title {
+      color: $primary-color;
+      margin-bottom: 20px;
+    }
+
+    .results-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+
+      .result-item {
+        border: 1px solid #e0e0e0;
+        transition: transform 0.2s;
+
+        &:hover {
+          transform: translateY(-5px);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .search-results {
+    padding: 10px;
+
+    .search-form {
+      input[type="text"],
+      input[type="date"],
+      select,
+      button {
+        flex: 1 1 100%;
+      }
+    }
+
+    .results-list,
+    .featured-results .results-list {
+      grid-template-columns: 1fr;
+    }
+  }
+}

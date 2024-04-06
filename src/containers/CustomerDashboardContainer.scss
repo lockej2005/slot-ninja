@@ -1,0 +1,16 @@
+// CustomerDashboard.scss
+@import '../variables';
+
+.customer-dashboard-container {
+  background-color: $secondary-color; // Using secondary-color for background
+  color: $text-color; // Using text-color for text
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.dashboard-title {
+  color: $primary-color; // Updated to use primary color variable
+  padding-bottom: 20px;
+  border-bottom: 1px solid $light-gray; // Assuming light-gray is defined for borders
+  margin-bottom: 20px;
+}

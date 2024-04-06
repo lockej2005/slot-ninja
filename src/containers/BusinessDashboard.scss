@@ -1,0 +1,57 @@
+// BusinessDashboard.scss
+@import '../variables';
+
+.business-dashboard {
+  background-color: $light-gray;
+  color: $text-color;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px $shadow-color;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-title {
+  color: $primary-color;
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.dashboard-navigation {
+  display: flex;
+  gap: 20px;
+}
+
+.dashboard-link {
+  background-color: $primary-color;
+  color: $secondary-color;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.listings-section,
+.create-listing-section {
+  margin-bottom: 30px;
+}
+
+.section-title {
+  color: $primary-color;
+  font-size: 2rem;
+}

@@ -1,0 +1,37 @@
+// Header.scss
+@import '../../variables';
+
+.app-header {
+    background-color: $secondary-color;
+    color: $primary-color; // Adjusted to primary color
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px $shadow-color;
+}
+  
+.header-title {
+    margin: 0;
+    font-size: 1.5em;
+}
+.header-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    img {
+        max-height: 100px; // Set this to the desired maximum height
+        width: auto; // Adjust width automatically based on height
+    }
+}  
+.header-link,
+.header-nav .nav-link {
+    text-decoration: none;
+    color: $primary-color; // Use primary color for consistency
+    transition: color 0.3s ease;
+}
+  
+.header-nav .nav-link:hover {
+    color: $hover-color; // Adjust for hover state
+}

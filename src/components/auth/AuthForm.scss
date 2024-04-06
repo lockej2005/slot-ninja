@@ -1,0 +1,56 @@
+// AuthForm.scss
+@import '../../variables';
+
+.form-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: $secondary-color; // Assuming secondary-color is used for backgrounds
+    box-shadow: 0 4px 6px $shadow-color;
+    border-radius: 8px;
+}
+
+.form-title {
+    color: $primary-color; // Updated to use primary color variable
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-form .form-group {
+    margin-bottom: 15px;
+}
+
+.auth-form label {
+    display: block;
+    color: $text-color; // Using the general text color
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid $light-gray; // Assuming you have a light gray for borders
+    box-sizing: border-box;
+}
+
+.form-button {
+    width: 100%;
+    background-color: $primary-color; // Using primary color for buttons
+    color: $secondary-color; // Assuming this is a contrast color suitable for text on buttons
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.form-button:hover {
+    background-color: $hover-color; // Using hover color when button is hovered
+}
+
+.login-error {
+    color: $alert-color;
+    font-weight: 800;
+}

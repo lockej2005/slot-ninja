@@ -1,0 +1,17 @@
+// Footer.scss
+@import '../../variables';
+
+.app-footer {
+    background-color: $secondary-color;
+    color: $primary-color; // Changed to primary-color for consistency
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 -2px 4px $shadow-color;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+  
+.footer-content p {
+    margin: 0;
+}
