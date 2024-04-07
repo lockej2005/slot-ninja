@@ -23,7 +23,7 @@ function CustomerDashboard() {
           <div className="explore-body">
             {/* Link or button to explore services */}
             <p>Discover what's around you!</p>
-            <Link className="explore-button" to="/customer/searchresults">Start Exploring</Link>
+            <Link className="explore-button" to="/">Start Exploring</Link>
           </div>
         </section>
       </div>

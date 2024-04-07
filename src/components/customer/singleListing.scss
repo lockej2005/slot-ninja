@@ -1,0 +1,104 @@
+@import '../../variables';
+
+.single-listing {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 40px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  .description {
+    color: #919191;
+    font-size: 20px;
+  }
+
+  .listing-details,
+  .business-info,
+  .booking-section {
+    text-align: left;
+
+    h1,
+    h2,
+    p {
+      text-align: left;
+    }
+  }
+
+  .listing-details {
+    margin-bottom: 40px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+  }
+  .original-price {
+    color: $alert-color;
+    font-weight: 600;
+  }
+  .business-info {
+    width: auto;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+  }
+
+  .booking-section {
+    .price {
+      font-size: 32px;
+      font-weight: bold;
+      color: $primary-color;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      background-color: $primary-color;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .single-listing {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 40px;
+
+    .listing-details {
+      margin-bottom: 0;
+    }
+  }
+}

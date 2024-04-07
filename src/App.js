@@ -12,8 +12,9 @@ import CustomerDashboard from './components/customer/CustomerDashboard';
 import BookingForm from './components/customer/BookingForm';
 import SearchResults from './components/customer/SearchResults';
 import NewListingForm from './components/business/NewListingForm';
+import SingleListing from './components/customer/singleListing'
 import './App.css';
-import { supabase } from './supabaseClient'; // Adjust the path as necessary
+import { supabase } from './supabaseClient';
 
 export const AuthContext = createContext(null);
 
@@ -36,16 +37,11 @@ function AuthProvider({ children }) {
     };
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{children}</AuthContext.Provider>;
 }
 
 function PrivateRoute({ children }) {
   const { currentUser } = useAuth();
-
   return currentUser ? children : <Navigate to="/login" />;
 }
 
@@ -56,17 +52,66 @@ function App() {
         <div className="App">
           <Header />
           <Routes>
-            <Route path="/" element={<Navigate replace to="/login" />} />
+            <Route path="/" element={<SearchResults />} />
+            <Route path="/singleListing/:id" element={<SingleListing />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
-            <Route path="/business/dashboard" element={<PrivateRoute><BusinessDashboard /></PrivateRoute>} />
-            <Route path="/business/profile" element={<PrivateRoute><BusinessProfile /></PrivateRoute>} />
-            <Route path="/business/listings" element={<PrivateRoute><BusinessListings /></PrivateRoute>} />
-            <Route path="/business/listings/new" element={<PrivateRoute><NewListingForm /></PrivateRoute>} />
-            <Route path="/customer/dashboard" element={<PrivateRoute><CustomerDashboardContainer /></PrivateRoute>} />
-            <Route path="/customer/explore" element={<PrivateRoute><CustomerDashboard /></PrivateRoute>} />
-            <Route path="/customer/book" element={<PrivateRoute><BookingForm /></PrivateRoute>} />
-            <Route path="/customer/searchresults" element={<PrivateRoute><SearchResults /></PrivateRoute>} />
+            <Route
+              path="/business/dashboard"
+              element={
+                <PrivateRoute>
+                  <BusinessDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/business/profile"
+              element={
+                <PrivateRoute>
+                  <BusinessProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/business/listings"
+              element={
+                <PrivateRoute>
+                  <BusinessListings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/business/listings/new"
+              element={
+                <PrivateRoute>
+                  <NewListingForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customer/dashboard"
+              element={
+                <PrivateRoute>
+                  <CustomerDashboardContainer />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customer/explore"
+              element={
+                <PrivateRoute>
+                  <CustomerDashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/customer/book"
+              element={
+                <PrivateRoute>
+                  <BookingForm />
+                </PrivateRoute>
+              }
+            />
           </Routes>
           <Footer />
         </div>

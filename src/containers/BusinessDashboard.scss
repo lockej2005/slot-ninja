@@ -2,56 +2,50 @@
 @import '../variables';
 
 .business-dashboard {
-  background-color: $light-gray;
-  color: $text-color;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px $shadow-color;
-}
-
-.dashboard-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-}
+  min-height: 100vh;
 
-.dashboard-title {
-  color: $primary-color;
-  font-size: 2.5rem;
-  margin: 0;
-}
+  .side-panel {
+    width: 250px;
+    background-color: $light-gray;
+    padding: 20px;
+    box-shadow: 0 4px 6px $shadow-color;
 
-.dashboard-navigation {
-  display: flex;
-  gap: 20px;
-}
+    .dashboard-navigation {
+      display: flex;
+      flex-direction: column;
 
-.dashboard-link {
-  background-color: $primary-color;
-  color: $secondary-color;
-  padding: 12px 20px;
-  text-decoration: none;
-  border-radius: 5px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  
-  &:hover {
-    background-color: $hover-color;
+      .dashboard-link {
+        padding: 12px 20px;
+        text-decoration: none;
+        color: $text-color;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+
+        &:hover {
+          background-color: $hover-color;
+        }
+      }
+    }
   }
-}
 
-.dashboard-content {
-  display: flex;
-  flex-direction: column;
-}
+  .dashboard-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
 
-.listings-section,
-.create-listing-section {
-  margin-bottom: 30px;
-}
+    .listings-section {
+      margin-bottom: 30px;
 
-.section-title {
-  color: $primary-color;
-  font-size: 2rem;
+      .section-title {
+        color: $primary-color;
+        font-size: 2rem;
+      }
+    }
+  }
 }

@@ -1,7 +1,8 @@
 // BusinessDashboard.js
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import BusinessListings from '../components/business/BusinessListings';
+import NewListingForm from '../components/business/NewListingForm';
+import BusinessProfile from '../components/business/BusinessProfile';
 import { AuthContext } from '../App';
 import { supabase } from '../supabaseClient';
 import './BusinessDashboard.scss';
@@ -9,6 +10,7 @@ import './BusinessDashboard.scss';
 function BusinessDashboard() {
   const [userName, setUserName] = useState('');
   const [listings, setListings] = useState([]);
+  const [selectedComponent, setSelectedComponent] = useState('dashboard');
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -44,21 +46,46 @@ function BusinessDashboard() {
     fetchUserDataAndListings();
   }, [currentUser]);
 
+  const renderSelectedComponent = () => {
+    switch (selectedComponent) {
+      case 'listings':
+        return <BusinessListings listings={listings} />;
+      case 'newListing':
+        return <NewListingForm />;
+      case 'profile':
+        return <BusinessProfile />;
+      case 'payments':
+        return <div>Payments component goes here</div>;
+      default:
+        return <div>You have no notifications.</div>;
+    }
+  };
+
   return (
     <div className="business-dashboard">
-      <div className="dashboard-header">
-        <h1 className="dashboard-title">Welcome, {userName}!</h1>
-        <div className="dashboard-navigation">
-          <Link className="dashboard-link" to="/business/profile">Update Profile</Link>
-          <Link className="dashboard-link" to="/business/listings/new">Create New Listing</Link>
-        </div>
+      <div className="side-panel">
+        <nav className="dashboard-navigation">
+          <button className="dashboard-link" onClick={() => setSelectedComponent('dashboard')}>
+            Dashboard
+          </button>
+          <button className="dashboard-link" onClick={() => setSelectedComponent('listings')}>
+            Active Listings
+          </button>
+          <button className="dashboard-link" onClick={() => setSelectedComponent('history')}>
+            History
+          </button>
+          <button className="dashboard-link" onClick={() => setSelectedComponent('newListing')}>
+            Create New Listing
+          </button>
+          <button className="dashboard-link" onClick={() => setSelectedComponent('profile')}>
+            Update Profile
+          </button>
+          <button className="dashboard-link" onClick={() => setSelectedComponent('payments')}>
+            Payments
+          </button>
+        </nav>
       </div>
-      <div className="dashboard-content">
-        <section className="listings-section">
-          <h2 className="section-title">Your Listings</h2>
-          <BusinessListings listings={listings} />
-        </section>
-      </div>
+      <div className="dashboard-content">{renderSelectedComponent()}</div>
     </div>
   );
 }

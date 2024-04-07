@@ -13,7 +13,7 @@ function BusinessListings({ listings }) {
             <div className="listing-details">
               <p className="listing-price">${listing.price}</p>
               <p className="listing-location">Location: {listing.location}</p>
-              <p className="listing-time">Time: {new Date(listing.time).toLocaleString()}</p>
+              <p className="listing-time">Start Time: {new Date(listing.time).toLocaleString()}</p>
               <p className="listing-originalPrice">Original Price: ${listing.original_price}</p>
               <p className="listing-discount">
                 Discount: {listing.original_price && `${((1 - listing.price / listing.original_price) * 100).toFixed(2)}%`}

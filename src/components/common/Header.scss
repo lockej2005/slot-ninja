@@ -2,36 +2,68 @@
 @import '../../variables';
 
 .app-header {
-    background-color: $secondary-color;
-    color: $primary-color; // Adjusted to primary color
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px $shadow-color;
+  background-color: $container-color;
+  color: $primary-color;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px $shadow-color;
 }
-  
-.header-title {
-    margin: 0;
-    font-size: 1.5em;
-}
-.header-link {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 
-    img {
-        max-height: 100px; // Set this to the desired maximum height
-        width: auto; // Adjust width automatically based on height
-    }
-}  
-.header-link,
-.header-nav .nav-link {
-    text-decoration: none;
-    color: $primary-color; // Use primary color for consistency
-    transition: color 0.3s ease;
+.header-left {
+  display: flex;
+  align-items: center;
 }
-  
-.header-nav .nav-link:hover {
-    color: $hover-color; // Adjust for hover state
+
+.button {
+  background-color: $primary-color;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+.header-link {
+  display: flex;
+  align-items: center;
+
+  img {
+    max-height: 100px;
+    width: auto;
+  }
+}
+
+.header-title {
+  margin: 0;
+  font-size: 1.5em;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.header-nav .nav-link {
+  text-decoration: none;
+  color: $primary-color;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-title {
+    display: none;
+  }
 }

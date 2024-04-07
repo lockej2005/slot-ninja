@@ -1,8 +1,20 @@
 // SearchResults.scss
 @import '../../variables';
 body {
-    background-color: $container-color;
+    background-color: #ccc;
 }
+* {
+  text-decoration: none;
+}
+
+.discount {
+    background-color: $alert-color;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
 .search-results {
   max-width: 1200px;
   margin: 20px auto;
@@ -16,6 +28,7 @@ body {
     text-align: center;
     color: $text-color;
   }
+
 
   .search-form {
     display: flex;
@@ -73,7 +86,12 @@ body {
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-
+    .softText  {
+      p {
+        color: #5e5e5e;
+        font-size: 12px;
+      }
+    }
     h3 {
       color: $primary-color;
       margin: 0 0 10px 0;
@@ -102,10 +120,7 @@ body {
       margin-bottom: 20px;
     }
   
-    .discount {
-      color: $alert-color;
-      font-weight: 700;
-    }
+
   
     .results-list {
         display: grid;
@@ -143,3 +158,24 @@ body {
     }
   }
 }
+
+.category-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  
+    .category-bubble {
+      background-color: $light-gray;
+      color: $text-color;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  
+      &.selected {
+        background-color: $primary-color;
+        color: #fff;
+      }
+    }
+  }
