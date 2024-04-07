@@ -1,6 +1,8 @@
 // SearchResults.scss
 @import '../../variables';
-
+body {
+    background-color: $container-color;
+}
 .search-results {
   max-width: 1200px;
   margin: 20px auto;
@@ -61,8 +63,8 @@
   .results-list {
     display: grid;
     list-style-type: none;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+    grid-template-columns: repeat(4, 1fr); // Display 4 columns on desktop
   }
 
   .result-item {
@@ -94,21 +96,27 @@
     border-radius: 8px;
     margin-top: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
+  
     .featured-title {
       color: $primary-color;
       margin-bottom: 20px;
     }
-
+  
+    .discount {
+      color: $alert-color;
+      font-weight: 700;
+    }
+  
     .results-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 0;
+        margin: 0;
+  
       .result-item {
         border: 1px solid #e0e0e0;
         transition: transform 0.2s;
-
+  
         &:hover {
           transform: translateY(-5px);
         }
@@ -116,7 +124,6 @@
     }
   }
 }
-
 @media screen and (max-width: 768px) {
   .search-results {
     padding: 10px;

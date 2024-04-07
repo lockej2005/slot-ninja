@@ -25,6 +25,9 @@ function Header() {
           <img src={logo} alt="Booking Platform Logo" />
         </Link>
       </h1>
+      <h1>
+        Slot Ninja
+      </h1>
       <nav className="header-nav">
         {currentUser ? (
           <button onClick={handleLogout} className="nav-link">Logout</button>
