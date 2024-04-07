@@ -46,10 +46,14 @@ function BusinessDashboard() {
     fetchUserDataAndListings();
   }, [currentUser]);
 
+  const handleListingDeleted = (listingId) => {
+    setListings(listings.filter(listing => listing.id !== listingId));
+  };
+
   const renderSelectedComponent = () => {
     switch (selectedComponent) {
       case 'listings':
-        return <BusinessListings listings={listings} />;
+        return <BusinessListings listings={listings} onListingDeleted={handleListingDeleted} />;
       case 'newListing':
         return <NewListingForm />;
       case 'profile':
@@ -57,7 +61,7 @@ function BusinessDashboard() {
       case 'payments':
         return <div>Payments component goes here</div>;
       default:
-        return <div>You have no notifications.</div>;
+        return <div><h1>Welcome {userName}.</h1><br></br><div>You have no new notifications.</div></div>;
     }
   };
 

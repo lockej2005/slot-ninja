@@ -26,6 +26,7 @@ function NewListingForm() {
   const [price, setPrice] = useState('');
   const [originalPrice, setOriginalPrice] = useState('');
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
   const navigate = useNavigate();
 
   const toAEST = (dateString) => {
@@ -60,6 +61,7 @@ function NewListingForm() {
         original_price: originalPrice,
         category,
         user_id: user.data.user.id,
+        description: description,
       },
     ]);
   
@@ -133,6 +135,10 @@ function NewListingForm() {
               </option>
             ))}
           </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Description</label>
+          <input type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
         </div>
         <button type="submit" className="submit-button">Create Listing</button>
       </form>

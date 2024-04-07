@@ -1,8 +1,27 @@
 // BusinessListings.js
 import React from 'react';
+import { supabase } from '../../supabaseClient';
 import './BusinessListings.scss';
 
-function BusinessListings({ listings }) {
+function BusinessListings({ listings, onListingDeleted }) {
+  const handleDelete = async (listingId) => {
+    try {
+      const { error } = await supabase
+        .from('listings')
+        .delete()
+        .eq('id', listingId);
+
+      if (error) {
+        console.error('Error deleting listing:', error.message);
+      } else {
+        // Invoke the onListingDeleted callback with the deleted listing ID
+        onListingDeleted(listingId);
+      }
+    } catch (error) {
+      console.error('Error deleting listing:', error.message);
+    }
+  };
+
   return (
     <div className="listings-container">
       {listings.length > 0 ? (
@@ -21,7 +40,7 @@ function BusinessListings({ listings }) {
             </div>
             <div className="listing-actions">
               <button className="action-button edit">Edit</button>
-              <button className="action-button delete">Delete</button>
+              <button className="action-button delete" onClick={() => handleDelete(listing.id)}>Delete</button>
             </div>
           </div>
         ))
