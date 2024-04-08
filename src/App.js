@@ -12,6 +12,7 @@ import CustomerDashboard from './components/customer/CustomerDashboard';
 import BookingForm from './components/customer/BookingForm';
 import SearchResults from './components/customer/SearchResults';
 import NewListingForm from './components/business/NewListingForm';
+import UpcomingListings from './components/business/UpcomingListings';
 import SingleListing from './components/customer/singleListing'
 import './App.css';
 import { supabase } from './supabaseClient';
@@ -77,6 +78,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <BusinessListings />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/business/uppcominglistings"
+              element={
+                <PrivateRoute>
+                  <UpcomingListings />
                 </PrivateRoute>
               }
             />

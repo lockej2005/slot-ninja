@@ -1,7 +1,7 @@
 @import '../../variables';
 
 .new-listing-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 40px auto;
   padding: 30px;
   background-color: $secondary-color;
@@ -19,7 +19,17 @@
 
   .new-listing-form {
     width: 100%;
-    max-width: 400px;
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+
+      .form-group {
+        flex: 1;
+        margin-bottom: 0;
+      }
+    }
 
     .form-group {
       margin-bottom: 20px;
@@ -48,15 +58,6 @@
       }
     }
 
-    .form-row {
-      display: flex;
-      gap: 20px;
-
-      .form-group {
-        flex: 1;
-      }
-    }
-
     .submit-button {
       display: block;
       width: 100%;
@@ -74,11 +75,12 @@
       }
     }
   }
+
   .form-group input,
   .form-group select {
     box-sizing: border-box;
   }
-  
+
   .location-search-input {
     width: 100%;
     padding: 12px;
@@ -110,7 +112,8 @@
 
     .suggestion-item {
       cursor: pointer;
-      border-bottom: 1px solid $text-color;  
+      border-bottom: 1px solid $text-color;
+
       &:hover {
         background-color: $light-gray;
       }

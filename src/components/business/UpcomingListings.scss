@@ -1,0 +1,88 @@
+// UpcomingListings.scss
+@import '../../variables';
+
+.upcoming-listings-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: $secondary-color;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px $shadow-color;
+
+  .upcoming-listing {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid $light-gray;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .listing-info {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .user-info {
+      flex: 1;
+      margin-right: 20px;
+    }
+
+    .listing-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .listing-title {
+      color: $primary-color;
+      margin: 0 0 15px 0;
+      font-size: 1.8rem;
+    }
+
+    .listing-description,
+    .listing-location,
+    .listing-time,
+    .listing-originalPrice,
+    .listing-discount,
+    .user-name,
+    .user-phone {
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+      color: $text-color;
+    }
+
+    .listing-price {
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .action-button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: $secondary-color;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s;
+
+      &.edit {
+        background-color: $primary-color;
+
+        &:hover {
+          background-color: $hover-color;
+        }
+      }
+
+      &.delete {
+        background-color: $alert-color;
+
+        &:hover {
+          background-color: darken($alert-color, 10%);
+        }
+      }
+    }
+  }
+}

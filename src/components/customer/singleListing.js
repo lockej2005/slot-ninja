@@ -1,16 +1,19 @@
 // singleListing.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { supabase } from '../../supabaseClient';
 import './singleListing.scss';
 import { useParams } from 'react-router-dom';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import { AuthContext } from '../../App';
 
 const SingleListing = () => {
   const [listing, setListing] = useState({});
   const [user, setUser] = useState({});
   const [selectedTime, setSelectedTime] = useState(null);
+  const [isBooked, setIsBooked] = useState(false);
   const { id: listingId } = useParams();
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -24,7 +27,6 @@ const SingleListing = () => {
         console.error('Error fetching listing:', listingError.message);
       } else {
         setListing(listingData);
-
         const { data: userData, error: userError } = await supabase
           .from('users')
           .select('*')
@@ -66,15 +68,41 @@ const SingleListing = () => {
     return aestTime.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true });
   }
 
-  const handleBooking = () => {
-    if (selectedTime) {
-      // Implement your booking logic here
-      console.log('Booking time:', selectedTime);
+  const handleBooking = async () => {
+    if (currentUser) {
+      try {
+        const data = await supabase
+          .from('listings')
+          .update({ customer_id: currentUser.id })
+          .eq('id', listingId);
+
+        if (data.error) {
+          console.error('Error updating listing:', data.error.message);
+        } else {
+          console.log('Booking successful');
+          setIsBooked(true);
+        }
+      } catch (error) {
+        console.error('Error updating listing:', error.message);
+      }
     }
   };
+
   const mapUrl = listing.location
     ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyDyOq0aaiK74kyH68XE_7VKp7GeJbMc90w&q=${encodeURIComponent(listing.location)}`
     : '';
+
+  if (isBooked) {
+    return (
+      <div className="single-listing">
+        <div className="thank-you-message">
+          <h2>Thank you for booking!</h2>
+          <p>Details have been sent to your email.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="single-listing">
       <div className="listing-details">
@@ -83,7 +111,7 @@ const SingleListing = () => {
         <p>{listing.location}</p>
         <p>Category: {listing.category}</p>
         <p>
-        🕒{displayAEST(listing.startTime)} to {displayAEST(listing.endTime)}
+          🕒{displayAEST(listing.startTime)} to {displayAEST(listing.endTime)}
         </p>
         <div className="business-info">
           <h3>Business Information</h3>
@@ -93,33 +121,28 @@ const SingleListing = () => {
           <p>{user.description}</p>
         </div>
       </div>
-
       <div className="booking-section">
-      <div className="map-container">
-        {mapUrl && (
-          <iframe
-            title="Location Map"
-            src={mapUrl}
-            width="100%"
-            height="200"
-            frameBorder="0"
-            style={{ border: 0 }}
-            allowFullScreen
-          ></iframe>
-        )}
-      </div>
-      <p className="price">Price: ${listing.price}</p>
-      {listing.original_price && (
+        <div className="map-container">
+          {mapUrl && (
+            <iframe
+              title="Location Map"
+              src={mapUrl}
+              width="100%"
+              height="200"
+              frameBorder="0"
+              style={{ border: 0 }}
+              allowFullScreen
+            ></iframe>
+          )}
+        </div>
+        <p className="price">Price: ${listing.price}</p>
+        {listing.original_price && (
           <p className="original-price">
             Original Price: ${listing.original_price} ({discountPercentage}% off)
           </p>
         )}
-
-        <button onClick={handleBooking} >
-          Book Now
-        </button>
+        <button onClick={handleBooking}>Book Now</button>
       </div>
-
     </div>
   );
 };

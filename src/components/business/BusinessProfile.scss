@@ -2,8 +2,7 @@
 @import '../../variables';
 
 .profile-container {
-  max-width: 600px;
-  margin: 20px auto;
+  min-width: 500px;
   padding: 20px;
   background-color: $secondary-color;
   border-radius: 8px;

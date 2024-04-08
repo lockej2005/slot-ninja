@@ -27,6 +27,7 @@ function NewListingForm() {
   const [originalPrice, setOriginalPrice] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
+  const [inPerson, setInPerson] = useState(false); // Add inPerson state
   const navigate = useNavigate();
 
   const toAEST = (dateString) => {
@@ -62,6 +63,7 @@ function NewListingForm() {
         category,
         user_id: user.data.user.id,
         description: description,
+        inPerson: inPerson,
       },
     ]);
   
@@ -139,6 +141,15 @@ function NewListingForm() {
         <div className="form-group">
           <label htmlFor="description">Description</label>
           <input type="text" id="description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+        </div>
+        <div className="form-group">
+          <p>Will this booking be paid for in person?</p>
+          <input
+            type="checkbox"
+            id="inPerson"
+            checked={inPerson}
+            onChange={(e) => setInPerson(e.target.checked)}
+          />
         </div>
         <button type="submit" className="submit-button">Create Listing</button>
       </form>

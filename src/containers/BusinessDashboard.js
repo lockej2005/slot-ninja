@@ -6,10 +6,13 @@ import BusinessProfile from '../components/business/BusinessProfile';
 import { AuthContext } from '../App';
 import { supabase } from '../supabaseClient';
 import './BusinessDashboard.scss';
+import UpcomingListings from '../components/business/UpcomingListings';
 
 function BusinessDashboard() {
   const [userName, setUserName] = useState('');
   const [listings, setListings] = useState([]);
+  const [futureListings, setFutureListings] = useState([]);
+
   const [selectedComponent, setSelectedComponent] = useState('dashboard');
   const { currentUser } = useContext(AuthContext);
 
@@ -30,16 +33,19 @@ function BusinessDashboard() {
         setUserName(userData.name);
       }
 
-      // Fetch listings data
+      // Fetch listings data with non-null customer_id and future startDate
+      const currentDate = new Date().toISOString();
       let { data: listingsData, error: listingsError } = await supabase
         .from('listings')
         .select('*')
-        .eq('user_id', currentUser.id);
+        .eq('user_id', currentUser.id)
+        .not('customer_id', 'is', null)
+        .gt('startTime', currentDate);
 
       if (listingsError) {
         console.error('Error fetching listings:', listingsError.message);
       } else {
-        setListings(listingsData);
+        setFutureListings(listingsData);
       }
     };
 
@@ -61,7 +67,7 @@ function BusinessDashboard() {
       case 'payments':
         return <div>Payments component goes here</div>;
       default:
-        return <div><h1>Welcome {userName}.</h1><br></br><div>You have no new notifications.</div></div>;
+        return <div><h1>Welcome {userName}.</h1><br></br><div>You have no new notifications.</div><UpcomingListings listings={futureListings}/></div>;
     }
   };
 
