@@ -27,7 +27,8 @@ function NewListingForm() {
   const [originalPrice, setOriginalPrice] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [inPerson, setInPerson] = useState(false); // Add inPerson state
+  const [inPerson, setInPerson] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const toAEST = (dateString) => {

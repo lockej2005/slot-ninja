@@ -1,6 +1,9 @@
 // BusinessDashboard.scss
 @import '../variables';
 
+h1 {
+  color: $primary-color;
+}
 .business-dashboard {
   display: flex;
   min-height: 100vh;

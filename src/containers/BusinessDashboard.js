@@ -12,7 +12,6 @@ function BusinessDashboard() {
   const [userName, setUserName] = useState('');
   const [listings, setListings] = useState([]);
   const [futureListings, setFutureListings] = useState([]);
-
   const [selectedComponent, setSelectedComponent] = useState('dashboard');
   const { currentUser } = useContext(AuthContext);
 
@@ -33,19 +32,31 @@ function BusinessDashboard() {
         setUserName(userData.name);
       }
 
+      // Fetch all listings associated with the user's ID
+      let { data: allListingsData, error: allListingsError } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('user_id', currentUser.id);
+
+      if (allListingsError) {
+        console.error('Error fetching all listings:', allListingsError.message);
+      } else {
+        setListings(allListingsData);
+      }
+
       // Fetch listings data with non-null customer_id and future startDate
       const currentDate = new Date().toISOString();
-      let { data: listingsData, error: listingsError } = await supabase
+      let { data: futureListingsData, error: futureListingsError } = await supabase
         .from('listings')
         .select('*')
         .eq('user_id', currentUser.id)
         .not('customer_id', 'is', null)
         .gt('startTime', currentDate);
 
-      if (listingsError) {
-        console.error('Error fetching listings:', listingsError.message);
+      if (futureListingsError) {
+        console.error('Error fetching future listings:', futureListingsError.message);
       } else {
-        setFutureListings(listingsData);
+        setFutureListings(futureListingsData);
       }
     };
 
@@ -67,7 +78,13 @@ function BusinessDashboard() {
       case 'payments':
         return <div>Payments component goes here</div>;
       default:
-        return <div><h1>Welcome {userName}.</h1><br></br><div>You have no new notifications.</div><UpcomingListings listings={futureListings}/></div>;
+        return (
+          <div>
+            <h1 >Welcome {userName}.</h1>
+            <br />
+            <UpcomingListings listings={futureListings} />
+          </div>
+        );
     }
   };
 

@@ -5,7 +5,20 @@ import './UpcomingListings.scss';
 
 function UpcomingListings({ listings, onListingDeleted }) {
   const [users, setUsers] = useState({});
-
+  function displayAEST(timeString) {
+    const aestTime = new Date(timeString);
+    return aestTime.toLocaleString('en-AU', {
+      weekday: 'long', // Display the day of the week
+      year: 'numeric', // Display the year
+      month: 'long', // Display the month
+      day: '2-digit', // Display the day of the month
+      hour: '2-digit', // Display the hour
+      minute: '2-digit', // Display the minute
+      second: '2-digit', // Optionally, display the second
+      hour12: true, // Use 12-hour time
+    });
+  }
+  
   useEffect(() => {
     const fetchUsers = async () => {
       const userIds = [...new Set(listings.map(listing => listing.user_id))];
@@ -47,34 +60,33 @@ function UpcomingListings({ listings, onListingDeleted }) {
 
   return (
     <div className="upcoming-listings-container">
+    <h2>Upcoming Appointments</h2>
       {listings.length > 0 ? (
         listings.map((listing) => (
           <div key={listing.id} className="upcoming-listing">
-            <div className="listing-info">
+            <div className="listing-details">
+              <div className='listRow'>
               <h3 className="listing-title">{listing.title}</h3>
-              <p className="listing-description">{listing.description}</p>
-              <div className="listing-details">
-                <p className="listing-price">${listing.price}</p>
-                <p className="listing-location">Location: {listing.location}</p>
-                <p className="listing-time">Start Time: {new Date(listing.time).toLocaleString()}</p>
-                <p className="listing-originalPrice">Original Price: ${listing.original_price}</p>
-                <p className="listing-discount">
-                  Discount: {listing.original_price && `${((1 - listing.price / listing.original_price) * 100).toFixed(2)}%`}
-                </p>
+              <p className="listing-description">{listing.description} Location: {listing.location} <span style={{ fontWeight: "800"}}>{displayAEST(listing.startTime)}</span></p>
+              <p className="listing-price">${listing.price}</p>
+              <p className="listing-location"></p>
+              <p className="listing-time"></p>
               </div>
             </div>
-            <div className="user-info">
-              <p className="user-name">Name: {users[listing.user_id]?.name}</p>
-              <p className="user-phone">Phone: {users[listing.user_id]?.phone}</p>
-            </div>
-            <div className="listing-actions">
-              <button className="action-button edit">Edit</button>
-              <button className="action-button delete" onClick={() => handleDelete(listing.id)}>Delete</button>
+            <div className="customer-info">
+              <div className="user-info">
+                <p className="user-name">Name: {users[listing.user_id]?.name}</p>
+                <p className="user-phone">Phone: {users[listing.user_id]?.phone}</p>
+              </div>
+              <div className="listing-actions">
+                <button className="action-button edit">Edit</button>
+                <button className="action-button delete" onClick={() => handleDelete(listing.id)}>Delete</button>
+              </div>
             </div>
           </div>
         ))
       ) : (
-        <p>No upcoming listings found.</p>
+        <p>You have no upcoming appointments.</p>
       )}
     </div>
   );

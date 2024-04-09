@@ -9,9 +9,6 @@
   box-shadow: 0 4px 6px $shadow-color;
 
   .upcoming-listing {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 20px;
     border-bottom: 1px solid $light-gray;
 
@@ -19,68 +16,82 @@
       border-bottom: none;
     }
 
-    .listing-info {
-      flex: 1;
-      margin-right: 20px;
+    .listing-details {
+      margin-bottom: 20px;
+
+      .listRow {
+        flex-direction: row;
+        flex: 2;
+        gap: 10px;
+        text-align: left;
+      }  
+      .listing-title {
+        color: $primary-color;
+        margin: 0 0 15px 0;
+        font-size: 1.8rem;
+        flex: 1;
+      }
+
+      .listing-description,
+      .listing-location,
+      .listing-time,
+      .listing-originalPrice,
+      .listing-discount {
+        margin-bottom: 5px;
+        font-size: 1.1rem;
+        color: $text-color;
+      }
+
+      .listing-price {
+        font-weight: bold;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+      }
     }
 
-    .user-info {
-      flex: 1;
-      margin-right: 20px;
-    }
-
-    .listing-actions {
+    .customer-info {
       display: flex;
-      gap: 10px;
-    }
+      align-items: center;
+      justify-content: space-between;
 
-    .listing-title {
-      color: $primary-color;
-      margin: 0 0 15px 0;
-      font-size: 1.8rem;
-    }
-
-    .listing-description,
-    .listing-location,
-    .listing-time,
-    .listing-originalPrice,
-    .listing-discount,
-    .user-name,
-    .user-phone {
-      margin-bottom: 5px;
-      font-size: 1.1rem;
-      color: $text-color;
-    }
-
-    .listing-price {
-      font-weight: bold;
-      font-size: 1.3rem;
-      margin-bottom: 10px;
-    }
-
-    .action-button {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: $secondary-color;
-      font-size: 1rem;
-      font-weight: 500;
-      transition: background-color 0.3s;
-
-      &.edit {
-        background-color: $primary-color;
-
-        &:hover {
-          background-color: $hover-color;
+      .user-info {
+        .user-name,
+        .user-phone {
+          margin-bottom: 5px;
+          font-size: 1.1rem;
+          color: $text-color;
         }
       }
 
-      &.delete {
-        background-color: $alert-color;
+      .listing-actions {
+        display: flex;
+        gap: 10px;
 
-        &:hover {
-          background-color: darken($alert-color, 10%);
+        .action-button {
+          padding: 8px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          color: $secondary-color;
+          font-size: 1rem;
+          font-weight: 500;
+          transition: background-color 0.3s;
+
+          &.edit {
+            background-color: $primary-color;
+
+            &:hover {
+              background-color: $hover-color;
+            }
+          }
+
+          &.delete {
+            background-color: $alert-color;
+
+            &:hover {
+              background-color: darken($alert-color, 10%);
+            }
+          }
         }
       }
     }
