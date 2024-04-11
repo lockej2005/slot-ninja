@@ -19,7 +19,24 @@
 
   .new-listing-form {
     width: 100%;
-
+    .success-message {
+      color: #fff;
+      font-weight: 700;
+      background-color: green;      
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    
+    .error-message {
+      color: #fff;
+      font-weight: 700;
+      background-color: red;      
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    
     .form-row {
       display: flex;
       gap: 20px;

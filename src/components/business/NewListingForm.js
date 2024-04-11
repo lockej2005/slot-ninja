@@ -29,50 +29,48 @@ function NewListingForm() {
   const [description, setDescription] = useState('');
   const [inPerson, setInPerson] = useState(false);
   const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false); // New state to track if the message is an error
   const navigate = useNavigate();
 
-  const toAEST = (dateString) => {
-    const date = new Date(dateString);
-    const userOffset = date.getTimezoneOffset() * 60000; // User's timezone offset in milliseconds
-    const aestOffset = 10 * 60 * 60 * 1000; // AEST offset in milliseconds
-    return new Date(date.getTime() + userOffset + aestOffset).toISOString();
+  const resetForm = () => {
+    setTitle('');
+    setLocation('');
+    setStartTime('');
+    setEndTime('');
+    setPrice('');
+    setOriginalPrice('');
+    setCategory('');
+    setDescription('');
+    setInPerson(false);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     let user = await supabase.auth.getUser();
-  
-    // Function to convert local time to AEST and format as ISO string
-    const toAEST = (dateString) => {
-      const localDate = new Date(dateString);
-      const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-      const aestOffset = 10 * 60 * 60 * 1000; // AEST offset in milliseconds
-      return new Date(utcDate.getTime() + aestOffset).toISOString();
-    };
-  
-    const startTimeAEST = toAEST(startTime);
-    const endTimeAEST = toAEST(endTime);
-  
+    
     const { data, error } = await supabase.from('listings').insert([
       {
         title,
         location,
-        startTime: startTimeAEST,
-        endTime: endTimeAEST,
+        startTime: startTime,
+        endTime: endTime,
         price,
         original_price: originalPrice,
         category,
         user_id: user.data.user.id,
-        description: description,
-        inPerson: inPerson,
+        description,
+        inPerson,
       },
     ]);
-  
+
     if (error) {
-      console.error('Error creating listing:', error.message);
+      setIsError(true);
+      setMessage(`Error creating listing: ${error.message}. Please try again.`);
     } else {
-      console.log('Listing created successfully:', data);
-      navigate('/business/dashboard');
+      resetForm();
+      setIsError(false);
+      setMessage('Appointment successfully created');
+      // navigate('/business/dashboard'); // Uncomment if redirection is needed after success
     }
   };
   
@@ -153,6 +151,11 @@ function NewListingForm() {
           />
         </div>
         <button type="submit" className="submit-button">Create Listing</button>
+        {message && (
+          <div className={isError ? 'error-message' : 'success-message'}>
+            {message}
+          </div>
+        )}
       </form>
     </div>
   );
