@@ -19,48 +19,67 @@ function BusinessDashboard() {
   useEffect(() => {
     const fetchUserDataAndListings = async () => {
       if (!currentUser) return;
-
+  
       let { data: userData, error: userError } = await supabase
         .from('users')
         .select('name')
         .eq('id', currentUser.id)
         .single();
-
+  
       if (userError) {
         console.error('Error fetching user data:', userError.message);
       } else {
         setUserName(userData.name);
       }
-
+  
       const currentDate = new Date().toISOString();
-
+  
+      // Fetch active listings that are in the future and have a customer_id value of null
+      console.log(currentUser)
+      console.log(currentDate)
+      let { data: activeListingsData, error: activeListingsError } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .gt('startTime', currentDate)
+      .or('customer_id.is.null,customer_id.eq.""');
+  
+      if (activeListingsData.error) {
+        console.error('Error fetching active listings:', activeListingsData.error.message);
+      } else {
+        console.log(activeListingsData)
+        setListings(activeListingsData);
+      }
+  
       // Fetch future listings
       let { data: futureListingsData, error: futureListingsError } = await supabase
-        .from('listings')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .gt('startTime', currentDate);
-
+      .from('listings')
+      .select('*')
+      .eq('user_id', currentUser.id)
+      .gt('startTime', currentDate)
+      .neq('customer_id', null)
+      .neq('customer_id', '');
+  
       if (futureListingsError) {
         console.error('Error fetching future listings:', futureListingsError.message);
       } else {
         setFutureListings(futureListingsData);
       }
-
+  
       // Fetch past listings separately
       let { data: pastListingsData, error: pastListingsError } = await supabase
         .from('listings')
         .select('*')
         .eq('user_id', currentUser.id)
         .lt('startTime', currentDate);
-      console.log(pastListingsData)
+  
       if (pastListingsError) {
         console.error('Error fetching past listings:', pastListingsError.message);
       } else {
         setPastListings(pastListingsData);
       }
     };
-
+  
     fetchUserDataAndListings();
   }, [currentUser]);
 
@@ -73,15 +92,17 @@ function BusinessDashboard() {
   const renderSelectedComponent = () => {
     switch (selectedComponent) {
       case 'listings':
+        console.log(listings)
         return <BusinessListings listings={listings} onListingDeleted={handleListingDeleted} />;
       case 'newListing':
         return <NewListingForm />;
       case 'profile':
         return <BusinessProfile />;
       case 'history':
-        return <ListingHistory listings={pastListings} />;
+        console.log(pastListings)
+        return <BusinessListings listings={pastListings} />;
       case 'payments':
-        return <div>Payments component goes here</div>;
+        return <div><h1>Payments are Coming Soon...</h1></div>;
       default:
         return (
           <div>

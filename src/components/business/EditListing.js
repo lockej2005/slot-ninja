@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import './NewListingForm.scss';
+import './EditListing.scss';
 
 const categories = [
   'Health and Wellness',
@@ -18,7 +18,7 @@ const categories = [
   // Add more categories as needed
 ];
 
-function NewListingForm() {
+function EditListing() {
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -29,60 +29,82 @@ function NewListingForm() {
   const [description, setDescription] = useState('');
   const [inPerson, setInPerson] = useState(false);
   const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false); // New state to track if the message is an error
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
-
-  const resetForm = () => {
-    setTitle('');
-    setLocation('');
-    setStartTime('');
-    setEndTime('');
-    setPrice('');
-    setOriginalPrice('');
-    setCategory('');
-    setDescription('');
-    setInPerson(false);
+  const { id } = useParams();
+  const handleBack = () => {
+    navigate(-1); // Navigate back to the previous page
   };
+  useEffect(() => {
+    const fetchListing = async () => {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        setIsError(true);
+        setMessage(`Error fetching listing: ${error.message}`);
+      } else {
+        setTitle(data.title);
+        setLocation(data.location);
+        setStartTime(formatDateTime(data.startTime));
+        setEndTime(formatDateTime(data.endTime));
+        setPrice(data.price);
+        setOriginalPrice(data.original_price);
+        setCategory(data.category);
+        setDescription(data.description);
+        setInPerson(data.inPerson);
+      }
+    };
+
+    fetchListing();
+  }, [id]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let user = await supabase.auth.getUser();
-    
-    const { data, error } = await supabase.from('listings').insert([
-      {
+
+    const { data, error } = await supabase
+      .from('listings')
+      .update({
         title,
         location,
-        startTime: startTime,
-        endTime: endTime,
+        startTime,
+        endTime,
         price,
         original_price: originalPrice,
         category,
-        user_id: user.data.user.id,
         description,
         inPerson,
-      },
-    ]);
+      })
+      .eq('id', id);
 
     if (error) {
       setIsError(true);
-      setMessage(`Error creating listing: ${error.message}. Please try again.`);
+      setMessage(`Error updating listing: ${error.message}. Please try again.`);
     } else {
-      resetForm();
       setIsError(false);
-      setMessage('Appointment successfully created');
-      // navigate('/business/dashboard'); // Uncomment if redirection is needed after success
+      setMessage('Listing successfully updated');
+        handleBack()
     }
   };
-  
 
   const handleLocationSelect = (address) => {
     setLocation(address);
   };
-
+  const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    return dateTime.toISOString().slice(0, 16);
+  };
   return (
-    <div className="new-listing-container">
-      <h1 className="new-listing-title">Create New Listing</h1>
-      <form onSubmit={handleSubmit} className="new-listing-form">
+    <div className="edit-listing-container">
+      <button className="back-button" onClick={handleBack}>
+        Back
+      </button>
+      <h1 className="edit-listing-title">Edit Listing</h1>
+
+      <form onSubmit={handleSubmit} className="edit-listing-form">
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -108,14 +130,14 @@ function NewListingForm() {
             )}
           </PlacesAutocomplete>
         </div>
-          <div className="form-group">
-            <label htmlFor="startTime">Start Time</label>
-            <input type="datetime-local" id="startTime" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="endTime">End Time</label>
-            <input type="datetime-local" id="endTime" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
-          </div>
+        <div className="form-group">
+          <label htmlFor="startTime">Start Time</label>
+          <input type="datetime-local" id="startTime" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+        </div>
+        <div className="form-group">
+          <label htmlFor="endTime">End Time</label>
+          <input type="datetime-local" id="endTime" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+        </div>
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="price">Price</label>
@@ -150,7 +172,7 @@ function NewListingForm() {
             onChange={(e) => setInPerson(e.target.checked)}
           />
         </div> */}
-        <button type="submit" className="submit-button">Create Listing</button>
+        <button type="submit" className="submit-button">Update Listing</button>
         {message && (
           <div className={isError ? 'error-message' : 'success-message'}>
             {message}
@@ -161,4 +183,4 @@ function NewListingForm() {
   );
 }
 
-export default NewListingForm;
+export default EditListing;

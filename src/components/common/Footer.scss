@@ -1,5 +1,4 @@
 @import '../../variables';
-
 .app-footer {
   background-color: $container-color;
   color: $primary-color;
@@ -37,9 +36,11 @@
           a {
             color: $primary-color;
             text-decoration: none;
-
+            font-weight: 600;
+            transition: 0.5s;
             &:hover {
-              text-decoration: underline;
+              text-decoration: none;
+              color: #fff;
             }
           }
         }

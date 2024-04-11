@@ -14,6 +14,7 @@ import SearchResults from './components/customer/SearchResults';
 import NewListingForm from './components/business/NewListingForm';
 import UpcomingListings from './components/business/UpcomingListings';
 import SingleListing from './components/customer/singleListing'
+import EditListing from './components/business/EditListing'
 import './App.css';
 import { supabase } from './supabaseClient';
 
@@ -70,6 +71,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <BusinessProfile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/business/edit-listing/:id"
+              element={
+                <PrivateRoute>
+                  <EditListing />
                 </PrivateRoute>
               }
             />

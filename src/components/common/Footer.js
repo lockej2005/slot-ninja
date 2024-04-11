@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.scss';
 import logo from '../../logo.png'; // Replace with your logo file path
+import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
@@ -10,13 +11,13 @@ function Footer() {
           <img src={logo} alt="Logo" className="logo" />
         </div>
         <div className="links-container">
-          <ul className="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Terms &amp; Conditions</a></li>
-          </ul>
+        <ul className="footer-links">
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/business/dashboard">Business Dashboard</Link></li>
+          <li><Link to="/">Search Listings</Link></li>
+          <li><Link to="/help">Help</Link></li>
+          <li><Link to="/terms-conditions">Terms &amp; Conditions</Link></li>
+      </ul>
         </div>
         <div className="disclaimer-container">
           <p className="disclaimer">

@@ -21,7 +21,19 @@ function BusinessListings({ listings, onListingDeleted }) {
       console.error('Error deleting listing:', error.message);
     }
   };
-
+  const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    return dateTime.toLocaleString('en-US', {
+      timeZone: 'UTC',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+  };
   return (
     <div className="listings-container">
       {listings.length > 0 ? (
@@ -32,7 +44,7 @@ function BusinessListings({ listings, onListingDeleted }) {
             <div className="listing-details">
               <p className="listing-price">${listing.price}</p>
               <p className="listing-location">Location: {listing.location}</p>
-              <p className="listing-time">Start Time: {new Date(listing.time).toLocaleString()}</p>
+              <p className="listing-time">Start Time: {formatDateTime(listing.startTime)}</p>
               <p className="listing-originalPrice">Original Price: ${listing.original_price}</p>
               <p className="listing-discount">
                 Discount: {listing.original_price && `${((1 - listing.price / listing.original_price) * 100).toFixed(2)}%`}

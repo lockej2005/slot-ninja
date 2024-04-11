@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../supabaseClient';
 import './SearchResults.scss';
 import { Link } from 'react-router-dom';
@@ -13,113 +13,138 @@ function SearchResults() {
   const [featuredResults, setFeaturedResults] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [range, setRange] = useState(10); // Default range in kilometers
+  const locationInputRef = useRef(null);
+
+  const handleGeocodeResponse = (data) => {
+    const addressComponents = data.results[0].address_components;
+    const suburb = addressComponents.find((component) =>
+      component.types.includes('locality')
+    )?.long_name;
+    return suburb;
+  };
 
   useEffect(() => {
-    // Get user's location
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        });
-  
-        // Reverse geocode user's location to get suburb and postcode
-        const response = await fetch(
-          `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=YOUR_API_KEY`
-        );
-        const data = await response.json();
-        if (data.results.length > 0) {
-          const addressComponents = data.results[0].address_components;
-          const suburb = addressComponents.find((component) =>
-            component.types.includes('locality')
-          )?.long_name;
-          const postcode = addressComponents.find((component) =>
-            component.types.includes('postal_code')
-          )?.long_name;
-          setLocation(`${suburb} ${postcode}`);
-        }
-      },
-      (error) => {
-        console.error('Error getting user location:', error);
-      }
-    );
+    // Load the Google Places Autocomplete script
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDyOq0aaiK74kyH68XE_7VKp7GeJbMc90w&libraries=places`;
+    script.async = true;
+    script.onload = () => initializeAutocomplete();
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
+
+  const initializeAutocomplete = () => {
+    if (!locationInputRef.current) return;
+
+    const autocomplete = new window.google.maps.places.Autocomplete(locationInputRef.current, {
+      types: ['(regions)'],
+      componentRestrictions: { country: 'au' },
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      const suburb = place.address_components.find((component) =>
+        component.types.includes('locality')
+      )?.long_name;
+
+      if (suburb) {
+        setLocation(suburb);
+      }
+    });
+  };
 
   useEffect(() => {
     const fetchListings = async () => {
+      // Check if the user's location is set before fetching listings
+      if (!userLocation) return;
+  
       let query = supabase.from('listings').select('*');
   
-      if (!searchTerm && selectedCategories.length === 0 && !time && !location) {
-        query = query.eq('tag', 'featured').limit(3);
-      } else {
-        if (selectedCategories.length > 0) {
-          query = query.in('category', selectedCategories);
-        }
-  
-        if (time) {
-          const selectedDate = new Date(time);
-          const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
-          const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1);
-          query = query.gte('startTime', startOfDay.toISOString()).lt('startTime', endOfDay.toISOString());
-        }
+      // Apply filters based on search term, selected categories, and time
+      if (searchTerm) {
+        // Example: Add logic to filter listings based on the searchTerm
+      }
+      if (selectedCategories.length > 0) {
+        query = query.in('category', selectedCategories);
+      }
+      if (time) {
+        const selectedDate = new Date(time);
+        const startOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        const endOfDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1);
+        query = query.gte('startTime', startOfDay.toISOString()).lt('startTime', endOfDay.toISOString());
       }
   
       const { data: listingsData, error: listingsError } = await query;
+  
       if (listingsError) {
         console.error('Error fetching listings:', listingsError.message);
-      } else {
-        // Geocode listing addresses
-        const listingsWithCoordinates = await Promise.all(
-          listingsData.map(async (listing) => {
-            const coordinates = await geocodeAddress(listing.location);
-            return { ...listing, ...coordinates };
-          })
-        );
-  
-        // Filter listings within the specified range
-        const filteredListings = listingsWithCoordinates.filter((listing) => {
-          if (userLocation) {
-            const distance = calculateDistance(
-              userLocation.latitude,
-              userLocation.longitude,
-              listing.latitude,
-              listing.longitude
-            );
-            return distance <= range;
-          }
-          return true;
-        });
-  
-        const userIds = filteredListings.map((listing) => listing.user_id);
-        const { data: usersData, error: usersError } = await supabase
-          .from('users')
-          .select('id, business_name, phone')
-          .in('id', userIds);
-  
-        if (usersError) {
-          console.error('Error fetching users:', usersError.message);
-        } else {
-          const resultsWithUserData = filteredListings.map((listing) => {
-            const user = usersData.find((user) => user.id === listing.user_id);
-            return { ...listing, business_name: user?.business_name, phone: user?.phone };
-          });
-  
-          if (!searchTerm && selectedCategories.length === 0 && !time && !location) {
-            setFeaturedResults(resultsWithUserData);
-          } else {
-            setResults(resultsWithUserData);
-          }
-        }
+        return;
       }
+  
+      // Geocode listing locations and filter by distance
+      const listingsWithCoordinates = await Promise.all(listingsData.map(async (listing) => {
+        const coordinates = await geocodeAddress(listing.location);
+        return {
+          ...listing,
+          ...coordinates
+        };
+      }));
+  
+      const filteredListings = listingsWithCoordinates.filter((listing) => {
+        if (userLocation.latitude && userLocation.longitude && listing.latitude && listing.longitude) {
+          const distance = calculateDistance(
+            userLocation.latitude,
+            userLocation.longitude,
+            listing.latitude,
+            listing.longitude
+          );
+          return distance <= range;
+        }
+        return false;
+      });
+  
+      // Get user details for the filtered listings
+      const userIds = filteredListings.map(listing => listing.user_id);
+      const { data: usersData, error: usersError } = await supabase
+        .from('users')
+        .select('id, business_name, phone')
+        .in('id', userIds);
+  
+      if (usersError) {
+        console.error('Error fetching users:', usersError.message);
+        return;
+      }
+  
+      // Combine listing and user details
+      const resultsWithUserData = filteredListings.map(listing => {
+        const user = usersData.find(user => user.id === listing.user_id);
+        return {
+          ...listing,
+          business_name: user?.business_name,
+          phone: user?.phone
+        };
+      });
+  
+      // Update the state with the filtered and enhanced listing data
+      setResults(resultsWithUserData);
     };
   
     fetchListings();
   }, [searchTerm, selectedCategories, time, location, userLocation, range]);
   
+  
 
-  const handleSearch = (event) => {
+  // The handleSearch now triggers geocoding of the entered location
+  const handleSearch = async (event) => {
     event.preventDefault();
-    console.log(searchTerm, selectedCategories, time, location);
+    console.log('Search initiated:', searchTerm, selectedCategories, time, location);
+
+    // Geocode the provided location and update userLocation state
+    const geocodedLocation = await geocodeAddress(location);
+    setUserLocation(geocodedLocation);
   };
 
   const handleCategoryClick = (category) => {
@@ -155,7 +180,11 @@ function displayAEST(timeString) {
     'Financial Services',  // Tax prep, financial advising, insurance consultation, etc.
   ];
   
-  
+  const handleLocationChange = (event) => {
+    const inputSuburb = event.target.value;
+    // Add validation or autosuggestion logic here if necessary
+    setLocation(inputSuburb);
+  };
   
   return (
     <div className="search-results">
@@ -163,7 +192,13 @@ function displayAEST(timeString) {
       <form onSubmit={handleSearch} className="search-form">
         <input type="text" placeholder="Custom Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         <input type="date" value={time} onChange={(e) => setTime(e.target.value)} />
-        <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+      <input
+        ref={locationInputRef}
+        type="text"
+        placeholder="Enter suburb"
+        value={location}
+        onChange={(e) => setLocation(e.target.value)}
+      />    
         <div>
           <label htmlFor="range">Range:</label>
           <select id="range" value={range} onChange={(e) => setRange(Number(e.target.value))}>
@@ -196,10 +231,14 @@ function displayAEST(timeString) {
         <p className="price">
           ${result.price}
           {' '}
-          <span className="discount">
-            {result.original_price && result.price < result.original_price &&
-              `${((1 - result.price / result.original_price) * 100).toFixed(0)}% off`}
-          </span>
+
+            {result.original_price != null && result.price < result.original_price &&
+            <span className="discount">
+                ${((1 - result.price / result.original_price) * 100).toFixed(0)}% off
+            </span>
+            }
+
+
         </p>
         <p>
           {displayAEST(result.startTime)} to {displayAEST(result.endTime)}

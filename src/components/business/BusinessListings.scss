@@ -18,6 +18,8 @@
   border-radius: 5px;
   background-color: $secondary-color;
   box-shadow: 0 2px 4px $shadow-color;
+  max-width: fit-content;
+  height: fit-content;
 }
 
 .listing-title {

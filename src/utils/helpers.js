@@ -15,13 +15,16 @@ export const geocodeAddress = async (address) => {
     if (response.data.status === 'OK') {
       const { lat, lng } = response.data.results[0].geometry.location;
       return { latitude: lat, longitude: lng };
+    } else if (response.data.status === 'ZERO_RESULTS') {
+      console.warn('Geocoding returned zero results for address:', address);
+      return { latitude: null, longitude: null };
     } else {
       console.error('Geocoding failed:', response.data.status);
-      return null;
+      return { latitude: null, longitude: null };
     }
   } catch (error) {
     console.error('Error geocoding address:', error);
-    return null;
+    return { latitude: null, longitude: null };
   }
 };
 
