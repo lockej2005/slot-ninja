@@ -1,30 +1,50 @@
 import React, { useState } from 'react';
-import './AuthForm.scss'; // Shared CSS file for both forms
 import { supabase } from '../../supabaseClient'; // Adjust the path as necessary
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_live_51P4eASP1v3Dm1cKPvctekur3arCo5DAO0Bdgk9cHm1V4i3MPJWnFTS94UsfF45bUUlilPdShd2TdpLNht3IZBhXI00lZTdbwPr');
 
 function SignupForm() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [signupError, setSignupError] = useState(''); // To display any signup errors
+    const [signupError, setSignupError] = useState('');
 
-    const handleSubmit = async (event) => {
+    const handleSignup = async (event) => {
         event.preventDefault();
-        const { error } = await supabase.auth.signUp({
+
+        const user = await supabase.auth.signUp({
             email: email,
             password: password,
         }, {
             data: {
-                username: username, // Optional: capture additional data during signup
+                username: username,
             }
         });
 
-        if (error) {
-            console.error('Signup error', error.message);
-            setSignupError(error.message);
-        } else {
-            console.log('Signup successful! Verification email sent.');
-            // Redirect or perform additional actions on successful signup
+        if (user.error) {
+            console.error('Signup error:', user.error.message);
+            setSignupError(user.error.message);
+            return;
+        }
+        console.log(user)
+        // User created successfully, proceed to payment
+        const stripe = await stripePromise;
+        const response = await fetch('http://localhost:3000/create-checkout-session', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: user.data.user.id })  // Send the user ID to the backend
+        });
+
+        const session = await response.json();
+        const result = await stripe.redirectToCheckout({
+            sessionId: session.id
+        });
+
+        if (result.error) {
+            alert(result.error.message);
         }
     };
 
@@ -32,7 +52,7 @@ function SignupForm() {
         <div className="form-container">
             <h1 className="form-title">Sign Up</h1>
             {signupError && <p className="signup-error">{signupError}</p>}
-            <form onSubmit={handleSubmit} className="auth-form">
+            <form onSubmit={handleSignup} className="auth-form">
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input

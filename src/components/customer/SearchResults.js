@@ -187,6 +187,10 @@ function displayAEST(timeString) {
   };
   
   return (
+    <div>
+      <h1>Get Booked today.</h1>
+      <p>Slot Ninja coordinates Businesses and Customers to make the most of their time, and get an appointment fast</p>
+      <br></br>
     <div className="search-results">
       <h1 className="results-title">{isSearchActive ? 'Search Results' : 'Find Last Minute Appointments'}</h1>
       <form onSubmit={handleSearch} className="search-form">
@@ -255,6 +259,7 @@ function displayAEST(timeString) {
 
 
       </div>
+    </div>
     </div>
   );
 }

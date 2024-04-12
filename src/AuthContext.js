@@ -12,6 +12,9 @@ function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    const session = supabase.auth.session();
+    setCurrentUser(session?.user || null);
+
     const subscription = supabase.auth.onAuthStateChange((_event, session) => {
       setCurrentUser(session?.user || null);
     });
@@ -23,14 +26,20 @@ function AuthProvider({ children }) {
     };
   }, []);
 
-  // Include setCurrentUser in the context value here
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setCurrentUser(null);
+  };
+
   const value = {
     currentUser,
     setCurrentUser,
     isAuthenticated: !!currentUser,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
 
 export default AuthProvider;

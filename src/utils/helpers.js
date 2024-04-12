@@ -1,7 +1,7 @@
 // utils.js
 import axios from 'axios';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyDyOq0aaiK74kyH68XE_7VKp7GeJbMc90w';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyA_TweEG73UFIuTyiMhxsy5KF6eoQe2U5I';
 
 export const geocodeAddress = async (address) => {
   try {
