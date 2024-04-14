@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import LoginForm from './components/auth/LoginForm';
@@ -15,38 +15,69 @@ import NewListingForm from './components/business/NewListingForm';
 import UpcomingListings from './components/business/UpcomingListings';
 import SingleListing from './components/customer/singleListing'
 import EditListing from './components/business/EditListing'
+import PaymentSuccess from './components/auth/PaymentSuccess';
 import './App.css';
 import { supabase } from './supabaseClient';
 
 export const AuthContext = createContext(null);
 
-function useAuth() {
+export function useAuth() {
   return useContext(AuthContext);
 }
+
 
 function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const getSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error getting session:', error.message);
+      } else {
+        setCurrentUser(data.session?.user || null);
+      }
+    };
+
+    getSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setCurrentUser(session?.user || null);
     });
 
     return () => {
-      if (listener && typeof listener.unsubscribe === 'function') {
-        listener.unsubscribe();
-      }
+      subscription.unsubscribe();
     };
   }, []);
 
   return <AuthContext.Provider value={{ currentUser, setCurrentUser }}>{children}</AuthContext.Provider>;
 }
-
 function PrivateRoute({ children }) {
   const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/login" />;
-}
+  const location = useLocation();
+  const [isValid, setIsValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const checkJWT = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      setIsValid(data.session !== null);
+      setIsLoading(false);
+    };
+
+    checkJWT();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isValid && location.pathname !== '/payment-success') {
+    return <Navigate to="/login" replace />;
+  }
+
+  return isValid || location.pathname === '/payment-success' ? children : <Navigate to="/login" replace />;
+}
 function App() {
   return (
     <AuthProvider>
@@ -58,6 +89,7 @@ function App() {
             <Route path="/singleListing/:id" element={<SingleListing />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route
               path="/business/dashboard"
               element={

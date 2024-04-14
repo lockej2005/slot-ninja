@@ -1,45 +1,33 @@
+// AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 
-// Context to hold authentication status
 export const AuthContext = createContext();
 
-export function useAuth() {
-  return React.useContext(AuthContext);
-}
-
-function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const session = supabase.auth.session();
-    setCurrentUser(session?.user || null);
+    setUser(session?.user ?? null);
+    setIsLoading(false);
 
-    const subscription = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user || null);
-    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
 
     return () => {
-      if (subscription.data) {
-        subscription.data.unsubscribe();
-      }
+      listener?.unsubscribe();
     };
   }, []);
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    setCurrentUser(null);
-  };
-
   const value = {
-    currentUser,
-    setCurrentUser,
-    isAuthenticated: !!currentUser,
-    logout,
+    user,
+    isLoading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-
-export default AuthProvider;
+};

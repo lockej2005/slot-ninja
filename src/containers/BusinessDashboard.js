@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import BusinessListings from '../components/business/BusinessListings';
 import NewListingForm from '../components/business/NewListingForm';
 import BusinessProfile from '../components/business/BusinessProfile';
 import ListingHistory from '../components/business/ListingHistory';
-import { AuthContext } from '../App';
 import { supabase } from '../supabaseClient';
 import './BusinessDashboard.scss';
 import UpcomingListings from '../components/business/UpcomingListings';
@@ -14,74 +14,92 @@ function BusinessDashboard() {
   const [futureListings, setFutureListings] = useState([]);
   const [pastListings, setPastListings] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState('dashboard');
-  const { currentUser } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [validAccount, setValidAccount] = useState(false);
 
   useEffect(() => {
     const fetchUserDataAndListings = async () => {
-      if (!currentUser) return;
-  
-      let { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('name')
-        .eq('id', currentUser.id)
-        .single();
-  
-      if (userError) {
-        console.error('Error fetching user data:', userError.message);
-      } else {
-        setUserName(userData.name);
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error('Error getting session:', sessionError.message);
+        return;
       }
-  
+
+      if (!session || !session.user) {
+        return;
+      }
+
+      const userId = session.user.id;
+
+      try {
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (userError) {
+          console.error('Error fetching user data:', userError.message);
+        } else {
+          if (userData.accountType === 'Business' && userData.paid === true) {
+            setUserName(userData.name);
+            setValidAccount(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+
       const currentDate = new Date().toISOString();
-  
+
       // Fetch active listings that are in the future and have a customer_id value of null
-      console.log(currentUser)
-      console.log(currentDate)
       let { data: activeListingsData, error: activeListingsError } = await supabase
-      .from('listings')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .gt('startTime', currentDate)
-      .or('customer_id.is.null,customer_id.eq.""');
-  
-      if (activeListingsData.error) {
-        console.error('Error fetching active listings:', activeListingsData.error.message);
+        .from('listings')
+        .select('*')
+        .eq('user_id', userId)
+        .gt('startTime', currentDate)
+        .or('customer_id.is.null,customer_id.eq.""');
+
+      if (activeListingsError) {
+        console.error('Error fetching active listings:', activeListingsError.message);
       } else {
-        console.log(activeListingsData)
         setListings(activeListingsData);
       }
-  
+
       // Fetch future listings
       let { data: futureListingsData, error: futureListingsError } = await supabase
-      .from('listings')
-      .select('*')
-      .eq('user_id', currentUser.id)
-      .gt('startTime', currentDate)
-      .neq('customer_id', null)
-      .neq('customer_id', '');
-  
+        .from('listings')
+        .select('*')
+        .eq('user_id', userId)
+        .gt('startTime', currentDate)
+        .neq('customer_id', null)
+        .neq('customer_id', '');
+
       if (futureListingsError) {
         console.error('Error fetching future listings:', futureListingsError.message);
       } else {
         setFutureListings(futureListingsData);
       }
-  
+
       // Fetch past listings separately
       let { data: pastListingsData, error: pastListingsError } = await supabase
         .from('listings')
         .select('*')
-        .eq('user_id', currentUser.id)
+        .eq('user_id', userId)
         .lt('startTime', currentDate);
-  
+
       if (pastListingsError) {
         console.error('Error fetching past listings:', pastListingsError.message);
       } else {
         setPastListings(pastListingsData);
       }
+
+      setLoading(false);
     };
-  
+
     fetchUserDataAndListings();
-  }, [currentUser]);
+  }, []);
 
   const handleListingDeleted = (listingId) => {
     setListings(listings.filter(listing => listing.id !== listingId));
@@ -92,14 +110,12 @@ function BusinessDashboard() {
   const renderSelectedComponent = () => {
     switch (selectedComponent) {
       case 'listings':
-        console.log(listings)
         return <BusinessListings listings={listings} onListingDeleted={handleListingDeleted} />;
       case 'newListing':
         return <NewListingForm />;
       case 'profile':
         return <BusinessProfile />;
       case 'history':
-        console.log(pastListings)
         return <BusinessListings listings={pastListings} />;
       case 'payments':
         return <div><h1>Payments are Coming Soon...</h1></div>;
@@ -113,6 +129,17 @@ function BusinessDashboard() {
         );
     }
   };
+
+  if (loading) {
+    // Show a loading indicator while fetching user data and listings
+    return <div>Loading...</div>;
+  }
+
+  if (!validAccount) {
+    // Redirect to login page if the user doesn't have a valid account
+    console.log("account invalid")
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="business-dashboard">
