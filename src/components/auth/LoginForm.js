@@ -39,9 +39,9 @@ function LoginForm() {
             setLoginError('Failed to determine account type.');
         } else {
             console.log('Account type:', data.accountType);
-            if (data.accountType === 'business') {
+            if (data.accountType === 'Business') {
                 navigate('/business/dashboard');
-            } else if (data.accountType === 'customer') {
+            } else if (data.accountType === 'Customer') {
                 navigate('/customer/dashboard');
             } else {
                 setLoginError('Invalid or unknown account type.');
@@ -52,10 +52,12 @@ function LoginForm() {
     return (
         <div className="form-container">
             <h1 className="form-title">Login</h1>
+            <small>Login is only avaliable for Businesses. If your a customer and would like to make changes to your booking, please email josh.locke@outlook.com</small>
             <form onSubmit={handleSubmit} className="auth-form">
                 {loginError && <p className="login-error">{loginError}</p>}
+                <br></br>
                 <div className="form-group">
-                    <label htmlFor="username">Username (actually email)</label>
+                    <label htmlFor="username">Email</label>
                     <input
                         type="text"
                         id="username"

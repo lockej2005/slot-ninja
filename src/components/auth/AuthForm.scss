@@ -8,6 +8,7 @@
     background-color: $secondary-color; // Assuming secondary-color is used for backgrounds
     box-shadow: 0 4px 6px $shadow-color;
     border-radius: 8px;
+    text-align: left;
 }
 
 .form-title {
@@ -53,4 +54,8 @@
 .login-error {
     color: $alert-color;
     font-weight: 800;
+}
+
+small {
+    color: $light-gray;
 }

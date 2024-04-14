@@ -38,7 +38,6 @@ function SignupForm() {
     // Add additional user info to the users table
     const { data, error: insertError } = await supabase.from('users').insert([{
       id: user.data.user.id, // Correctly access the user ID
-      name: name,
       business_name: businessName,
       accountType: 'Business',
       phone: phone,
@@ -81,30 +80,28 @@ function SignupForm() {
       {signupError && <p className="signup-error">{signupError}</p>}
       <form onSubmit={handleSignup} className="auth-form">
         <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div className="form-group">
           <label htmlFor="businessName">Business Name</label>
+          <small>This is the name displayed on your Listings.</small>
           <input type="text" id="businessName" value={businessName} onChange={(e) => setBusinessName(e.target.value)} required />
         </div>
         <div className="form-group">
           <label htmlFor="phone">Phone</label>
+          <small>Customers will be able to see this number on your Listings.</small>
           <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
         </div>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        </div>
+
         <div className="form-group">
           <label htmlFor="email">Email</label>
+          <small>Your booking notifications and admin info will be sent to this email.</small>
           <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
+          <small>Must be at least 6 Characters.</small>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <button type="submit" className="form-button">Sign Up</button>
+        <p>Our Business plan is one flat rate of $10/Month.</p>
+        <button type="submit" className="form-button">Continue to Payment</button>
       </form>
     </div>
   );

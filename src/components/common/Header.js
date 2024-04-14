@@ -1,24 +1,31 @@
-import React, { useContext } from 'react';
+// Header.js
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../App';  // Ensure this path points to where AuthContext is defined
-import { supabase } from '../../supabaseClient';  // Adjust the path as necessary
+import { AuthContext } from '../../App';
+import { supabase } from '../../supabaseClient';
 import './Header.scss';
-import logo from '../../logo.png'; // Adjust this path to where your logo is stored
+import logo from '../../logo.png';
 
 function Header() {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
-      setCurrentUser(null);  // This will now work correctly
+      setCurrentUser(null);
     } else {
       console.error('Logout error:', error.message);
     }
   };
+
   const handleBack = () => {
-    navigate(-1); // Navigate to the previous page
+    navigate(-1);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -32,15 +39,27 @@ function Header() {
         </Link>
       </div>
       <h1 className="header-title">Slot Ninja</h1>
-
       <nav className="header-nav">
         {currentUser ? (
-          <button onClick={handleLogout} className="button">Logout</button>
+          <button onClick={handleLogout} className="button1">
+            Logout
+          </button>
         ) : (
-          <>
-            <Link to="/login" className="nav-link">Login</Link>
-            <Link to="/signup" className="nav-link">Sign Up</Link>
-          </>
+          <div className="dropdown">
+            <button className="dropdown-toggle" onClick={toggleDropdown}>
+              Are you a business? &#8595;
+            </button>
+            {isDropdownOpen && (
+              <div className="dropdown-menu">
+                <Link to="/login" className="dropdown-link">
+                  Log in
+                </Link>
+                <Link to="/signup" className="dropdown-link">
+                  Sign up
+                </Link>
+              </div>
+            )}
+          </div>
         )}
       </nav>
     </header>

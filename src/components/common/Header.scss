@@ -16,6 +16,24 @@
   align-items: center;
 }
 
+.button1 {
+  background-color: $light-gray;
+  color: $primary-color;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
 .button {
   background-color: $primary-color;
   color: #fff;
@@ -34,7 +52,6 @@
     background-color: $hover-color;
   }
 }
-
 .header-link {
   display: flex;
   align-items: center;
@@ -66,5 +83,48 @@
 @media screen and (max-width: 768px) {
   .header-title {
     display: none;
+  }
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  background-color: $primary-color;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $hover-color;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px $shadow-color;
+  padding: 10px;
+  z-index: 1;
+  width: 100%;
+}
+
+.dropdown-link {
+  display: block;
+  text-decoration: none;
+  color: $primary-color;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $hover-color;
   }
 }

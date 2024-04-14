@@ -43,7 +43,8 @@ function BusinessDashboard() {
           console.error('Error fetching user data:', userError.message);
         } else {
           if (userData.accountType === 'Business' && userData.paid === true) {
-            setUserName(userData.name);
+            console.log(userData)
+            setUserName(userData.business_name);
             setValidAccount(true);
           }
         }
