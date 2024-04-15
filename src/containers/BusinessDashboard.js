@@ -7,6 +7,7 @@ import ListingHistory from '../components/business/ListingHistory';
 import { supabase } from '../supabaseClient';
 import './BusinessDashboard.scss';
 import UpcomingListings from '../components/business/UpcomingListings';
+import Loading from '../components/ui/Loading';
 
 function BusinessDashboard() {
   const [userName, setUserName] = useState('');
@@ -74,8 +75,8 @@ function BusinessDashboard() {
         .select('*')
         .eq('user_id', userId)
         .gt('startTime', currentDate)
-        .neq('customer_id', null)
-        .neq('customer_id', '');
+        .neq('customer_email', null)
+        .neq('customer_email', '');
 
       if (futureListingsError) {
         console.error('Error fetching future listings:', futureListingsError.message);
@@ -111,13 +112,23 @@ function BusinessDashboard() {
   const renderSelectedComponent = () => {
     switch (selectedComponent) {
       case 'listings':
-        return <BusinessListings listings={listings} onListingDeleted={handleListingDeleted} />;
+        return (
+          <div>
+          <h1>Active Listings</h1>    
+          <UpcomingListings listings={listings} onListingDeleted={handleListingDeleted} />;
+          </div>
+        )
       case 'newListing':
         return <NewListingForm />;
       case 'profile':
         return <BusinessProfile />;
       case 'history':
-        return <BusinessListings listings={pastListings} />;
+        return (
+          <div>
+            <h1>History</h1>  
+            <UpcomingListings listings={pastListings} />;
+          </div>
+        )
       case 'payments':
         return <div><h1>Payments are Coming Soon...</h1></div>;
       default:
@@ -125,6 +136,7 @@ function BusinessDashboard() {
           <div>
             <h1>Welcome {userName}.</h1>
             <br />
+            <h4>Your upcoming bookings</h4>
             <UpcomingListings listings={futureListings} />
           </div>
         );
@@ -133,7 +145,7 @@ function BusinessDashboard() {
 
   if (loading) {
     // Show a loading indicator while fetching user data and listings
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!validAccount) {

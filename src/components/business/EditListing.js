@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import './EditListing.scss';
+import Loading from '../ui/Loading';
 
 const categories = [
   'Health and Wellness',
@@ -116,7 +117,7 @@ function EditListing() {
               <div>
                 <input {...getInputProps({ placeholder: 'Search places...', className: 'location-search-input' })} />
                 <div className="autocomplete-dropdown-container">
-                  {loading && <div>Loading...</div>}
+                  {loading && <Loading />}
                   {suggestions.map((suggestion) => {
                     const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
                     return (

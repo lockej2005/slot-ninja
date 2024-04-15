@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
@@ -16,8 +17,11 @@ import UpcomingListings from './components/business/UpcomingListings';
 import SingleListing from './components/customer/singleListing'
 import EditListing from './components/business/EditListing'
 import PaymentSuccess from './components/auth/PaymentSuccess';
+import HelpPage from './static/HelpPage'
+import Loading from './components/ui/Loading';
 import './App.css';
 import { supabase } from './supabaseClient';
+import TermsAndConditionsPage from './static/TermsAndConditionsPage';
 
 export const AuthContext = createContext(null);
 
@@ -69,7 +73,7 @@ function PrivateRoute({ children }) {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (!isValid && location.pathname !== '/payment-success') {
@@ -90,6 +94,10 @@ function App() {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="/terms-conditions" element={<TermsAndConditionsPage />} />
+
+            
             <Route
               path="/business/dashboard"
               element={

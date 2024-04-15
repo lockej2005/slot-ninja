@@ -41,10 +41,10 @@ function LoginForm() {
             console.log('Account type:', data.accountType);
             if (data.accountType === 'Business') {
                 navigate('/business/dashboard');
-            } else if (data.accountType === 'Customer') {
+            } else if (data.accountType === 'Customer1111111111111111111111111111') {
                 navigate('/customer/dashboard');
             } else {
-                setLoginError('Invalid or unknown account type.');
+                setLoginError('Your payment hasn\'t been processed correctly. Please contact support.');
             }
         }
     };

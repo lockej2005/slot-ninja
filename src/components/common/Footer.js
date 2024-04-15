@@ -18,7 +18,7 @@ function Footer() {
           <li><Link to="/help">Help</Link></li>
           <li><Link to="/terms-conditions">Terms &amp; Conditions</Link></li>
       </ul>
-        </div>
+        </div>  
         <div className="disclaimer-container">
           <p className="disclaimer">
             Disclaimer: The information provided on this website is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.

@@ -66,7 +66,6 @@ function UpcomingListings({ listings, onListingDeleted }) {
 
   return (
     <div className="upcoming-listings-container">
-      <h2>Upcoming Appointments</h2>
       {listings.length > 0 ? (
         listings.map((listing) => (
           <div key={listing.id} className="upcoming-listing">
@@ -80,10 +79,19 @@ function UpcomingListings({ listings, onListingDeleted }) {
               </div>
             </div>
             <div className="customer-info">
-              <div className="customer-details">
-                <p className="customer-name">Name: {customers[listing.customer_id]?.name}</p>
-                <p className="customer-phone">Phone: {customers[listing.customer_id]?.phone}</p>
-              </div>
+            <div className="customer-details">
+              <h4>Customer Details</h4>
+              {/* Check if all customer details are empty and display a message if true */}
+              {(!listing.customer_name && !listing.customer_email && !listing.customer_phone) ? (
+                <p>No customer has booked yet</p>
+              ) : (
+                <>
+                  <p className="customer-name">{listing.customer_name || 'Name not available'}</p>
+                  <p className="customer-email">{listing.customer_email || 'Email not available'}</p>
+                  <p className="customer-phone">{listing.customer_phone || 'Phone not available'}</p>
+                </>
+              )}
+            </div>
               <div className="listing-actions">
                 <button className="action-button edit" onClick={() => handleEdit(listing.id)}>Edit</button>
                 <button className="action-button delete" onClick={() => handleDelete(listing.id)}>Delete</button>

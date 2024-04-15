@@ -7,14 +7,19 @@ import { geocodeAddress, calculateDistance } from '../../utils/helpers';
 function SearchResults() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [time, setTime] = useState('');
   const [location, setLocation] = useState('');
   const [results, setResults] = useState([]);
   const [featuredResults, setFeaturedResults] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
   const [range, setRange] = useState(10); // Default range in kilometers
   const locationInputRef = useRef(null);
-
+  const today = new Date();
+  console.log(today)
+  // Convert to YYYY-MM-DD format for the date input
+  const todayFormatted = today.toISOString().split('T')[0];
+  console.log(todayFormatted)
+  // Set the default time state to today's date
+  const [time, setTime] = useState(todayFormatted);
   const handleGeocodeResponse = (data) => {
     const addressComponents = data.results[0].address_components;
     const suburb = addressComponents.find((component) =>
@@ -26,7 +31,7 @@ function SearchResults() {
   useEffect(() => {
     // Load the Google Places Autocomplete script
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDyOq0aaiK74kyH68XE_7VKp7GeJbMc90w&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
     script.async = true;
     script.onload = () => initializeAutocomplete();
     document.body.appendChild(script);
@@ -194,7 +199,6 @@ function displayAEST(timeString) {
     <div className="search-results">
       <h1 className="results-title">{isSearchActive ? 'Search Results' : 'Find Last Minute Appointments'}</h1>
       <form onSubmit={handleSearch} className="search-form">
-        <input type="text" placeholder="Custom Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         <input type="date" value={time} onChange={(e) => setTime(e.target.value)} />
       <input
         ref={locationInputRef}
@@ -204,7 +208,6 @@ function displayAEST(timeString) {
         onChange={(e) => setLocation(e.target.value)}
       />    
         <div>
-          <label htmlFor="range">Range:</label>
           <select id="range" value={range} onChange={(e) => setRange(Number(e.target.value))}>
             <option value={1}>1 km</option>
             <option value={5}>5 km</option>

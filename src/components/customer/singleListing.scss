@@ -68,6 +68,30 @@
       font-weight: bold;
       color: $primary-color;
     }
+    .customer-inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;  // Adds space between each input
+
+      input {
+        padding: 10px;
+        font-size: 1rem;
+        border: 2px solid $primary-color;  // Adjust as needed
+        border-radius: 4px;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+        }
+      }
+    }
+
+    button {
+      margin-top: 20px; // Ensures space between the last input and the button
+    }
+
 
     button {
       padding: 15px 30px;
