@@ -55,7 +55,6 @@ function NewListingForm() {
         startTime: startTime,
         endTime: endTime,
         price,
-        original_price: originalPrice,
         category,
         user_id: user.data.user.id,
         description,
@@ -84,11 +83,11 @@ function NewListingForm() {
       <h1 className="new-listing-title">Create New Listing</h1>
       <form onSubmit={handleSubmit} className="new-listing-form">
         <div className="form-group">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title">Title <span style={{ color: '#c51818' }}>*</span></label>
           <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
         </div>
         <div className="form-group">
-          <label htmlFor="location">Location</label>
+          <label htmlFor="location">Location <span style={{ color: '#c51818' }}>*</span></label>
           <PlacesAutocomplete value={location} onChange={setLocation} onSelect={handleLocationSelect}>
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
               <div>
@@ -109,25 +108,21 @@ function NewListingForm() {
           </PlacesAutocomplete>
         </div>
           <div className="form-group">
-            <label htmlFor="startTime">Start Time</label>
+            <label htmlFor="startTime">Start Time <span style={{ color: '#c51818' }}>*</span></label>
             <input type="datetime-local" id="startTime" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
           </div>
           <div className="form-group">
-            <label htmlFor="endTime">End Time</label>
+            <label htmlFor="endTime">End Time <span style={{ color: '#c51818' }}>*</span></label>
             <input type="datetime-local" id="endTime" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
           </div>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="price">Price</label>
+            <label htmlFor="price">Price <span style={{ color: '#c51818' }}>*</span></label>
             <input type="number" id="price" value={price} onChange={(e) => setPrice(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="originalPrice">Original Price</label>
-            <input type="number" id="originalPrice" value={originalPrice} onChange={(e) => setOriginalPrice(e.target.value)} required />
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="category">Category</label>
+          <label htmlFor="category">Category <span style={{ color: '#c51818' }}>*</span></label>
           <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
             <option value="">Select a category</option>
             {categories.map((category, index) => (

@@ -115,22 +115,22 @@ function BusinessDashboard() {
         return (
           <div>
           <h1>Active Listings</h1>    
-          <UpcomingListings listings={listings} onListingDeleted={handleListingDeleted} />;
+          <UpcomingListings listings={listings} onListingDeleted={handleListingDeleted} />
           </div>
         )
       case 'newListing':
-        return <NewListingForm />;
+        return <NewListingForm />
       case 'profile':
-        return <BusinessProfile />;
+        return <BusinessProfile />
       case 'history':
         return (
           <div>
             <h1>History</h1>  
-            <UpcomingListings listings={pastListings} />;
+            <UpcomingListings listings={pastListings} />
           </div>
         )
       case 'payments':
-        return <div><h1>Payments are Coming Soon...</h1></div>;
+        return <div><h1>Payments are Coming Soon...</h1></div>
       default:
         return (
           <div>

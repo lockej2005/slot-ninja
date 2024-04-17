@@ -1,5 +1,4 @@
-// Header.js
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../App';
 import { supabase } from '../../supabaseClient';
@@ -15,6 +14,7 @@ function Header() {
     const { error } = await supabase.auth.signOut();
     if (!error) {
       setCurrentUser(null);
+      navigate('/login');  // Navigate to login page after logout
     } else {
       console.error('Logout error:', error.message);
     }
@@ -27,6 +27,24 @@ function Header() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  // Click outside handler
+  useEffect(() => {
+    function handleClickOutside(event) {
+      // Reference to the dropdown button or content
+      const dropdownElement = document.querySelector(".dropdown");
+      if (dropdownElement && !dropdownElement.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    // Add event listener
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // Clean up the event listener
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);  // Empty dependency array means this effect runs once on mount and cleanup on unmount
 
   return (
     <header className="app-header">

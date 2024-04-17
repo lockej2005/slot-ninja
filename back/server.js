@@ -28,12 +28,12 @@ app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [{
-        price: 'price_1P4gL1P1v3Dm1cKPy2RY1nkQ', // Use your actual price ID
+        price: 'price_1P6UZsP1v3Dm1cKPqjrDbF0t', // Use your actual price ID
         quantity: 1,
       }],
       mode: 'subscription',
-      success_url: `http://localhost:3001/payment-success?user_id=${userId}&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: 'http://localhost:3001/cancel',
+      success_url: `https://slotninja.app/payment-success?user_id=${userId}&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: 'https://slotninja.app/cancel',
       metadata: { userId: userId }
     });
 
@@ -42,6 +42,10 @@ app.post('/create-checkout-session', async (req, res) => {
     console.error('Stripe session creation failed:', error);
     res.status(500).json({ message: 'Internal Server Error', error: error });
   }
+});
+
+app.all('/test', (req, res) => {
+  res.send('Hello from /test');
 });
 
 app.get('/verify-payment', async (req, res) => {
@@ -73,7 +77,7 @@ app.get('/verify-payment', async (req, res) => {
 });
 
 app.post('/confirm-booking', async (req, res) => {
-  const { customerName, customerEmail, customerPhone, listingId, businessEmail } = req.body;
+  const { customerName, customerEmail, customerPhone, listingId, business, listing } = req.body;
 
   try {
     const { data: updatedListing, error: updateError } = await supabase
@@ -106,7 +110,7 @@ app.post('/confirm-booking', async (req, res) => {
     }
 
     // Send confirmation email to customer and business
-    await sendConfirmationEmail(customerEmail, businessEmail, listingData);
+    await sendConfirmationEmail(customerEmail, business, listing);
     res.json({ message: 'Booking confirmed and email sent!' });
   } catch (error) {
     console.error('Error during booking confirmation:', error);
@@ -114,31 +118,43 @@ app.post('/confirm-booking', async (req, res) => {
   }
 });
 
-function sendConfirmationEmail(customerEmail, businessEmail, bookingDetails) {
-  console.log(bookingDetails)
+function sendConfirmationEmail(customerEmail, business, listing) {
+  
   const request = mailjet.post("send", {'version': 'v3.1'}).request({
     "Messages": [
       {
         "From": {
-          "Email": "your-email@example.com",
-          "Name": "Your Business Name"
+          "Email": "josh.locke@outlook.com",
+          "Name": "Slot Ninja"
         },
         "To": [
           { "Email": customerEmail, "Name": "Customer Name" },
-          { "Email": businessEmail, "Name": "Business Name" }
+          { "Email": business.email, "Name": business.Name }
         ],
         "Subject": "Your Booking Confirmation",
-        "TextPart": `Dear Customer, your booking for ${bookingDetails.title} is confirmed.`,
-        "HTMLPart": `<h3>Dear Customer,</h3><p>Your booking for <strong>${bookingDetails.title}</strong> is confirmed.</p>`
+        "TextPart": `Dear Customer, your booking for ${listing.title} is confirmed.`,
+        "HTMLPart": `<h3>Dear Customer,</h3>
+                     <p>Your booking for <strong>${listing.title}</strong> is confirmed.</p>
+                     <h4>Booking Details:</h4>
+                     <p><strong>Title:</strong> ${listing.title}</p>
+                     <p><strong>Description:</strong> ${listing.description}</p>
+                     <p><strong>Category:</strong> ${listing.category}</p>
+                     <p><strong>Location:</strong> ${listing.location}</p>
+                     <p><strong>Date:</strong> ${new Date(listing.startTime).toLocaleDateString()} from ${new Date(listing.startTime).toLocaleTimeString()} to ${new Date(listing.endTime).toLocaleTimeString()}</p>
+                     <p><strong>Price:</strong> $${listing.price}</p>
+                     <br>
+                     <p>Thank you for choosing us for your ${listing.category} needs.</p>`
       }
     ]
   });
 
   return request
     .then(result => console.log('Email sent successfully', result.body))
-    .catch(err => console.error('Failed to send email', err.statusCode));
-}
+    .catch(err => {
+      console.error('Failed to send email:', err.statusCode, err.message);
+      throw err; // Rethrow the error to handle it in the calling function
+    });}
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
+app.listen(4040, () => {
+  console.log('Server running on port 4040');
 });

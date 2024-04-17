@@ -21,7 +21,7 @@ function PaymentSuccess() {
 
       console.log("Verifying payment...");
       try {
-        const response = await fetch(`http://localhost:3000/verify-payment?user_id=${userId}&session_id=${sessionId}`);
+        const response = await fetch(`https://phpstack-1181238-4491556.cloudwaysapps.com/verify-payment?user_id=${userId}&session_id=${sessionId}`);
         if (!response.ok) {
           console.error('Payment verification request failed');
           navigate('/payment-failed');
