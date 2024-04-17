@@ -9,12 +9,12 @@ function Header() {
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { logout } = useContext(AuthContext);
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
-      setCurrentUser(null);
-      navigate('/login');  // Navigate to login page after logout
+      logout();
     } else {
       console.error('Logout error:', error.message);
     }

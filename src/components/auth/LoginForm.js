@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthForm.scss';
 import { supabase } from '../../supabaseClient';
@@ -7,7 +7,7 @@ function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loginError, setLoginError] = useState('');
-    
+
     let navigate = useNavigate();
 
     const handleSubmit = async (event) => {

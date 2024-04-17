@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import BusinessListings from '../components/business/BusinessListings';
 import NewListingForm from '../components/business/NewListingForm';
@@ -8,6 +8,7 @@ import { supabase } from '../supabaseClient';
 import './BusinessDashboard.scss';
 import UpcomingListings from '../components/business/UpcomingListings';
 import Loading from '../components/ui/Loading';
+import { AuthContext } from '../App';
 
 function BusinessDashboard() {
   const [userName, setUserName] = useState('');
@@ -17,6 +18,8 @@ function BusinessDashboard() {
   const [selectedComponent, setSelectedComponent] = useState('dashboard');
   const [loading, setLoading] = useState(true);
   const [validAccount, setValidAccount] = useState(false);
+  const { logout } = useContext(AuthContext);
+
 
   useEffect(() => {
     const fetchUserDataAndListings = async () => {
@@ -151,7 +154,7 @@ function BusinessDashboard() {
   if (!validAccount) {
     // Redirect to login page if the user doesn't have a valid account
     console.log("account invalid")
-    return <Navigate to="/login" />;
+    logout();
   }
 
   return (
