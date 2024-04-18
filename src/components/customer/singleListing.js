@@ -114,8 +114,8 @@ const SingleListing = () => {
 
 
   const mapUrl = listing.location
-    ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyDyOq0aaiK74kyH68XE_7VKp7GeJbMc90w&q=${encodeURIComponent(listing.location)}`
-    : '';
+  ? `https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(listing.location)}`
+  : '';
 
   if (isBooked) {
     return (

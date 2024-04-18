@@ -52,8 +52,8 @@ function NewListingForm() {
       {
         title,
         location,
-        startTime: startTime,
-        endTime: endTime,
+        startTime: new Date(startTime).toISOString(),
+        endTime: new Date(endTime).toISOString(),
         price,
         category,
         user_id: user.data.user.id,
@@ -88,7 +88,13 @@ function NewListingForm() {
         </div>
         <div className="form-group">
           <label htmlFor="location">Location <span style={{ color: '#c51818' }}>*</span></label>
-          <PlacesAutocomplete value={location} onChange={setLocation} onSelect={handleLocationSelect}>
+          <PlacesAutocomplete
+            value={location}
+            onChange={setLocation}
+            onSelect={handleLocationSelect}
+            googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
+            loadingElement={<div style={{ height: '100%' }} />}
+          >            
             {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
               <div>
                 <input {...getInputProps({ placeholder: 'Search places...', className: 'location-search-input' })} />

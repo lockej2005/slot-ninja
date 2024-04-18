@@ -162,7 +162,12 @@ function SearchResults() {
 // This assumes that the time you're formatting is already in AEST.
 function displayAEST(timeString) {
   const aestTime = new Date(timeString);
-  return aestTime.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true });
+  return aestTime.toLocaleString('en-AU', {
+    timeZone: 'Australia/Sydney',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
 }
   
   const isSearchActive = searchTerm || selectedCategories.length > 0 || time || location;

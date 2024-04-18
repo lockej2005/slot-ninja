@@ -16,11 +16,15 @@ const supabase = createClient(
   "https://dpgcqisatsodbyhqzvdi.supabase.co",
   process.env.SUPABASE_SECRET_KEY
 );
+const corsOptions = {
+  origin: 'https://slotninja.app', // Allow only Slot Ninja app to access
+  optionsSuccessStatus: 200 // For legacy browser support
+};
 
 const app = express();
 app.use(express.json());
 app.use(morgan('combined'));
-app.use(cors());
+app.use(cors(corsOptions)); // Apply CORS settings
 
 app.post('/create-checkout-session', async (req, res) => {
   const userId = req.body.userId;
@@ -155,6 +159,6 @@ function sendConfirmationEmail(customerEmail, business, listing) {
       throw err; // Rethrow the error to handle it in the calling function
     });}
 
-app.listen(4040, () => {
-  console.log('Server running on port 4040');
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
 });

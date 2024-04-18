@@ -13,5 +13,10 @@
 ~~13. remove original price~~
 ~~14. Fix web routing error~~
 16. Sometimes listings in exact suburb doesn't show
+17. Dates don't show on customer view of listing
+18. Upcoming bookings shouldn't be shown in active listings
+19. Don't show booked listings
+20. Display customer name and details in email
+
 
 15. Personal Accountant and investments gpt

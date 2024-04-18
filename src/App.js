@@ -68,7 +68,7 @@ function AuthProvider({ children }) {
       }
   };
 
-  return <AuthContext.Provider value={{ currentUser, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ currentUser, setCurrentUser, logout }}>{children}</AuthContext.Provider>;
 }
 
 function PrivateRoute({ children }) {
