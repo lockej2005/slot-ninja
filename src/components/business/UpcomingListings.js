@@ -9,8 +9,8 @@ function UpcomingListings({ listings, onListingDeleted }) {
 
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
-    return dateTime.toLocaleString('en-US', {
-      timeZone: 'UTC',
+    return dateTime.toLocaleString('en-AU', {
+      timeZone: 'Australia/Sydney', // Set to Sydney time zone
       weekday: 'long',
       day: 'numeric',
       month: 'long',
@@ -20,6 +20,7 @@ function UpcomingListings({ listings, onListingDeleted }) {
       hour12: true,
     });
   };
+  
   const handleEdit = (listingId) => {
     navigate(`/business/edit-listing/${listingId}`);
   };

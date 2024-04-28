@@ -1,0 +1,34 @@
+.pitch-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .pitch-title {
+        text-align: center;
+        color: #333;
+    }
+
+    .pitch-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            color: #2C3E50;
+        }
+
+        p, ul {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    }
+}

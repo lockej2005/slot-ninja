@@ -64,7 +64,7 @@ function BusinessDashboard() {
         .select('*')
         .eq('user_id', userId)
         .gt('startTime', currentDate)
-        .or('customer_id.is.null,customer_id.eq.""');
+        .or('customer_email.is.null,customer_email.eq.""');
 
       if (activeListingsError) {
         console.error('Error fetching active listings:', activeListingsError.message);

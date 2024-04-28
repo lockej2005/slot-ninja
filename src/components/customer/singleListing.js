@@ -129,6 +129,27 @@ const SingleListing = () => {
     );
   }
 
+  function formatDateWithOrdinal(date) {
+    const day = date.getDate();
+    const month = date.toLocaleString('en-AU', { month: 'long' });
+    const year = date.getFullYear();
+    
+    const ordinal = getOrdinal(day);
+
+    return `${day}${ordinal} ${month} ${year}`;
+}
+
+function getOrdinal(n) {
+    var s = ["th", "st", "nd", "rd"],
+        v = n % 100;
+    return s[(v - 20) % 10] || s[v] || s[0];
+}
+
+  
+
+  const displayStartDate = () => {
+    return listing.startTime ? formatDateWithOrdinal(new Date(listing.startTime)) : '';
+  };
   return (
     <div className="single-listing">
       <div className="listing-details">
@@ -139,6 +160,7 @@ const SingleListing = () => {
         <p>
           🕒{displayAEST(listing.startTime)} to {displayAEST(listing.endTime)}
         </p>
+        <p>{displayStartDate()}</p>
         <div className="business-info">
           <h3>Business Information</h3>
           <p>{user.business_name}</p>

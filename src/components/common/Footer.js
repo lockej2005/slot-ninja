@@ -17,6 +17,8 @@ function Footer() {
           <li><Link to="/">Search Listings</Link></li>
           <li><Link to="/help">Help</Link></li>
           <li><Link to="/terms-conditions">Terms &amp; Conditions</Link></li>
+          <li><Link to="/how-it-works">How it Works</Link></li>
+
       </ul>
         </div>  
         <div className="disclaimer-container">

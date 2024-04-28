@@ -25,6 +25,7 @@ import EditListing from './components/business/EditListing';
 import PaymentSuccess from './components/auth/PaymentSuccess';
 import HelpPage from './static/HelpPage';
 import Loading from './components/ui/Loading';
+import Pitch from './static/Pitch';
 import './App.css';
 import { supabase } from './supabaseClient';
 import TermsAndConditionsPage from './static/TermsAndConditionsPage';
@@ -96,6 +97,8 @@ function App() {
                         <Route path="/payment-success" element={<PaymentSuccess />} />
                         <Route path="/help" element={<HelpPage />} />
                         <Route path="/terms-conditions" element={<TermsAndConditionsPage />} />
+                        <Route path="/how-it-works" element={<Pitch />} />
+
 
                         {/* Protected Routes */}
                         <Route path="/business/dashboard" element={<PrivateRoute><BusinessDashboard /></PrivateRoute>} />

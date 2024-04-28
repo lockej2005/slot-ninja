@@ -152,6 +152,27 @@ function SearchResults() {
     setUserLocation(geocodedLocation);
   };
 
+  // Function to format date with ordinal day
+function formatDateWithOrdinal(date) {
+  const dt = new Date(date);
+  const day = dt.getDate();
+  const month = dt.toLocaleString('en-AU', { month: 'long' });
+  const year = dt.getFullYear();
+  const ordinal = getOrdinal(day);
+  return `${day}${ordinal} ${month} ${year}`;
+}
+
+function getOrdinal(n) {
+  var s = ["th", "st", "nd", "rd"];
+  var v = n % 100;
+  return s[(v - 20) % 10] || s[(v % 10) - 1] || s[0];
+}
+
+// Display function adapted for mapping
+const displayStartDate = (startTime) => {
+  return startTime ? formatDateWithOrdinal(startTime) : '';
+};
+
   const handleCategoryClick = (category) => {
     if (selectedCategories.includes(category)) {
       setSelectedCategories(selectedCategories.filter((cat) => cat !== category));
@@ -236,33 +257,30 @@ function displayAEST(timeString) {
       <div className={isSearchActive ? 'search-results-list' : 'featured-results'}>
         <h2 className="featured-title">{isSearchActive ? '' : 'Featured Services'}</h2>
         <ul className="results-list">
-  {(isSearchActive ? results : featuredResults).map((result) => (
-    <Link key={result.id} to={`/singleListing/${result.id}`} className="result-item-link">
-      <li className="result-item">
-        <h3>{result.title}</h3>
-        <p className="price">
-          ${result.price}
-          {' '}
-
-            {result.original_price != null && result.price < result.original_price &&
-            <span className="discount">
-                ${((1 - result.price / result.original_price) * 100).toFixed(0)}% off
-            </span>
-            }
-
-
-        </p>
-        <p>
-          {displayAEST(result.startTime)} to {displayAEST(result.endTime)}
-        </p>
-        <div className='softText'>
-          <p>{result.business_name}</p>
-          <p>{result.phone}</p>
-          <p>{result.location}</p>
-        </div>
-      </li>
-    </Link>
-  ))}
+        {(isSearchActive ? results : featuredResults).map((result) => (
+  <Link key={result.id} to={`/singleListing/${result.id}`} className="result-item-link">
+    <li className="result-item">
+      <h3>{result.title}</h3>
+      <p className="price">
+        ${result.price}
+        {result.original_price != null && result.price < result.original_price &&
+          <span className="discount">
+            ${((1 - result.price / result.original_price) * 100).toFixed(0)}% off
+          </span>
+        }
+      </p>
+      <p>
+        {displayAEST(result.startTime)} to {displayAEST(result.endTime)}
+      </p>
+      <p>{displayStartDate(result.startTime)}</p> {/* Adjusted to use the function with parameter */}
+      <div className='softText'>
+        <p>{result.business_name}</p>
+        <p>{result.phone}</p>
+        <p>{result.location}</p>
+      </div>
+    </li>
+  </Link>
+))}
 </ul>
 
 

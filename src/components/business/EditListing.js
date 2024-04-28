@@ -65,29 +65,31 @@ function EditListing() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
+    const formattedStartTime = new Date(startTime).toISOString();
+    const formattedEndTime = new Date(endTime).toISOString();
+  
     const { data, error } = await supabase
       .from('listings')
       .update({
         title,
         location,
-        startTime,
-        endTime,
+        startTime: formattedStartTime,
+        endTime: formattedEndTime,
         price,
-        original_price: originalPrice,
         category,
         description,
         inPerson,
       })
       .eq('id', id);
-
+  
     if (error) {
       setIsError(true);
       setMessage(`Error updating listing: ${error.message}. Please try again.`);
     } else {
       setIsError(false);
       setMessage('Listing successfully updated');
-        handleBack()
+      handleBack();
     }
   };
 
@@ -96,7 +98,12 @@ function EditListing() {
   };
   const formatDateTime = (dateTimeString) => {
     const dateTime = new Date(dateTimeString);
-    return dateTime.toISOString().slice(0, 16);
+    const year = dateTime.getFullYear();
+    const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+    const day = String(dateTime.getDate()).padStart(2, '0');
+    const hours = String(dateTime.getHours()).padStart(2, '0');
+    const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
   return (
     <div className="edit-listing-container">
@@ -132,21 +139,29 @@ function EditListing() {
           </PlacesAutocomplete>
         </div>
         <div className="form-group">
-          <label htmlFor="startTime">Start Time</label>
-          <input type="datetime-local" id="startTime" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label htmlFor="endTime">End Time</label>
-          <input type="datetime-local" id="endTime" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
-        </div>
+        <label htmlFor="startTime">Start Time</label>
+        <input
+          type="datetime-local"
+          id="startTime"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="endTime">End Time</label>
+        <input
+          type="datetime-local"
+          id="endTime"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
+          required
+        />
+      </div>
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="price">Price</label>
             <input type="number" id="price" value={price} onChange={(e) => setPrice(e.target.value)} required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="originalPrice">Original Price</label>
-            <input type="number" id="originalPrice" value={originalPrice} onChange={(e) => setOriginalPrice(e.target.value)} required />
           </div>
         </div>
         <div className="form-group">
