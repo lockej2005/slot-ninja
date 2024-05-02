@@ -1,7 +1,7 @@
 @import '../../variables';
 .app-footer {
-  background-color: $container-color;
-  color: $primary-color;
+  background-color: #00132c;
+  color: #fff;
   padding: 40px 20px;
   box-shadow: 0 -2px 4px $shadow-color;
   position: relative;
@@ -34,13 +34,13 @@
           margin-bottom: 10px;
 
           a {
-            color: $primary-color;
+            color: #fff;
             text-decoration: none;
             font-weight: 600;
             transition: 0.5s;
             &:hover {
               text-decoration: none;
-              color: #fff;
+              color: $primary-color;
             }
           }
         }

@@ -6,7 +6,20 @@ body {
 * {
   text-decoration: none;
 }
+.container {
+  max-width: 1200px; // Adjust the max-width to fit your design needs
+  margin: auto; // This centers the container
+  display: flex;
+  flex-direction: column; // Stacks everything in one column
+  align-items: center; // Aligns items in the center
+  justify-content: center;
+  padding: 10px;
 
+  // Styles for all child elements to have 100% width of the main container
+  > * {
+    width: 100%;
+  }
+}
 .discount {
     background-color: $alert-color;
     padding: 5px;
@@ -15,6 +28,47 @@ body {
     font-size: 12px;
     font-weight: 700;
   }
+
+  .flow-container {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 20px;
+    justify-content: center;
+  }
+  
+  .flow-box {
+    background-color: $new-color;
+    color: #fff;
+    padding: 20px 40px;
+    border-radius: 10px; // Rounded edges
+    text-align: center;
+    flex-grow: 0; // Don't grow boxes; keep them the same size
+    margin: 0 10px; // Space between the arrows and boxes
+  }
+  
+  .flow-arrow {
+    color: $new-color;
+    margin: 0 20px; // Space between the arrows and boxes
+    font-size: 3rem; // Size of the arrow icon
+  }
+  
+  // Responsive adjustments as needed
+  @media (max-width: 768px) {
+    .flow-container {
+      flex-direction: column;
+    }
+  
+    .flow-box {
+      margin: 10px 0; // Space between boxes vertically
+    }
+  
+    .flow-arrow {
+      transform: rotate(90deg); // Rotate arrow to point down
+      margin: 10px 0; // Space between the arrows vertically
+    }
+  }
+  
 .search-results {
   max-width: 1200px;
   margin: 20px auto;
@@ -180,3 +234,112 @@ body {
       }
     }
   }
+
+  .info-cards-container {
+    display: flex;
+    padding: 20px;
+    justify-content: center;
+  
+    .info-card {
+      background-color: #fff; // Card background color
+      border: 1px solid #ddd; // Card border color
+      padding: 20px;
+      border-radius: 10px; // Rounded corners
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // Card shadow
+      margin: 0 10px; // Space between cards
+      text-align: center; // Center content
+      flex-grow: 1; // Cards take up equal space
+  
+      .icon {
+        font-size: 3rem; // Icon size
+        color: $primary-color; // Icon color, assuming you have a primary color variable
+        margin-bottom: 10px; // Space below the icon
+      }
+  
+      h2 {
+        margin-top: 0;
+        color: $text-color; // Assuming you have a text color variable
+      }
+  
+      p {
+        color: $new-color; // Use a secondary text color if you have one
+        font-size: 0.9rem; // Adjust font size as needed
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .info-cards-container {
+      flex-direction: column; // Stack cards vertically on smaller screens
+      align-items: center;
+  
+      .info-card {
+        max-width: 100%; // Allow card to expand full width on smaller screens
+        margin: 10px 0; // Space between stacked cards
+      }
+    }
+  }
+  
+  .email-waitlist-container {
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 8px;
+    margin: auto;
+    background-color: #00132c;
+  
+    .waitlist-title {
+      color: $secondary-color; // Title color
+      margin-bottom: 10px;
+    }
+  
+    .waitlist-text {
+      color: $secondary-color; // Text color
+      margin-bottom: 20px;
+    }
+  
+    .email-waitlist-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px; // Space between input and button
+  
+      .waitlist-input {
+        flex-grow: 1;
+        padding: 10px;
+        border-radius: 10px; // Rounded corners for the input
+        border: 2px solid $primary-color; // Border color
+        font-size: 16px;
+        color: $light-gray; // Input text color
+  
+        &:focus {
+          outline: none;
+          border-color: $hover-color; // Change border color on focus
+        }
+      }
+  
+      .waitlist-submit {
+        padding: 10px 20px;
+        background-color: $primary-color;
+        border: none;
+        border-radius: 10px; // Rounded corners for the button
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: $hover-color;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .email-waitlist-form {
+      flex-direction: column; // Stack input and button vertically on smaller screens
+  
+      .waitlist-input,
+      .waitlist-submit {
+      }
+    }
+  }
+  

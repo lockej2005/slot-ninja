@@ -23,12 +23,13 @@ function Footer() {
         </div>  
         <div className="disclaimer-container">
           <p className="disclaimer">
-            Disclaimer: The information provided on this website is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is therefore strictly at your own risk.
+            Slot Ninja is a subsidary of Intelligent Installations (ABN 12 280 598 739) and reserves the right to create, manage, promote and forward data displayed on this page on behalf of the businesses that agree to share their data with us.
           </p>
-        </div>
-        <div className="copyright-container">
+          <div className="copyright-container">
           <p>&copy; 2024 Slot Ninja. All rights reserved.</p>
         </div>
+        </div>
+
       </div>
     </footer>
   );

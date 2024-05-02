@@ -3,6 +3,7 @@ import { supabase } from '../../supabaseClient';
 import './SearchResults.scss';
 import { Link } from 'react-router-dom';
 import { geocodeAddress, calculateDistance } from '../../utils/helpers';
+import businessFlowImage from './business-flow.png'; // Adjust path as necessary
 
 function SearchResults() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -218,9 +219,19 @@ function displayAEST(timeString) {
   };
   
   return (
-    <div>
+    <div className='container'>
       <h1>Get Booked today.</h1>
       <p>Slot Ninja coordinates Businesses and Customers to make the most of their time, and get an appointment fast</p>
+
+
+      <div class="flow-container">
+        <div class="flow-box" id="business-system">Business System</div>
+        <i class="fas fa-long-arrow-alt-right flow-arrow"></i>
+        <div class="flow-box" id="slot-ninja">Slot Ninja</div>
+        <i class="fas fa-long-arrow-alt-right flow-arrow"></i>
+        <div class="flow-box" id="promote-listing">Promote and fill listing</div>
+      </div>  
+
       <br></br>
     <div className="search-results">
       <h1 className="results-title">{isSearchActive ? 'Search Results' : 'Find Last Minute Appointments'}</h1>
@@ -286,6 +297,38 @@ function displayAEST(timeString) {
 
       </div>
     </div>
+
+    <div className="info-cards-container">
+  <div className="info-card">
+    <i className="fas fa-user-clock icon"></i>
+    <h2>Quick Appointments</h2>
+    <p>Find and book appointments in just a few clicks, without the back-and-forth hassle.</p>
+  </div>
+  <div className="info-card">
+    <i className="fas fa-business-time icon"></i>
+    <h2>For Businesses</h2>
+    <p>Manage and fill your open slots more efficiently, reducing downtime and increasing revenue.</p>
+  </div>
+  <div className="info-card">
+    <i className="fas fa-users icon"></i>
+    <h2>For Customers</h2>
+    <p>Discover local services and book the perfect time slot that fits your busy schedule.</p>
+  </div>
+</div>
+<div className="email-waitlist-container">
+        <h2 className="waitlist-title">Join Our Waitlist</h2>
+        <p className="waitlist-text">Sign up to get notified when a booking in your genre pops up.</p>
+        <form className="email-waitlist-form">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="waitlist-input"
+            aria-label="Email for waitlist"
+            required
+          />
+          <button type="submit" className="waitlist-submit">Sign Up</button>
+        </form>
+      </div>
     </div>
   );
 }

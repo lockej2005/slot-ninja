@@ -2,13 +2,14 @@
 @import '../../variables';
 
 .app-header {
-  background-color: $container-color;
+  border: 1px solid #00132c;
   color: $primary-color;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px $shadow-color;
+  background-color: $new-color;
 }
 
 .header-left {
@@ -66,7 +67,7 @@
   margin: 0;
   font-size: 1.5em;
   text-align: center;
-  color: $primary-color;
+  color: #fff;
   flex-grow: 1;
 }
 
